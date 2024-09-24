@@ -1,0 +1,2 @@
+{"entity": [{"id": "id1", "posX": 10.0, "posY": 20.0, "type": "flight"}, {"id": "id2", "posX": 20.0, "posY": 30.0, "type": "flight"}, {"id": "id3", "posX": 50.0, "posY": 100.0, "type": "flight"}], "relation": [{"entity1": "id1", "entity2": "id2"}, {"entity1": "id1", "entity2": "id3"}]}
+{"entity": [{"id": "id1", "posX": 80.0, "posY": 20.0, "type": "flight"}, {"id": "id2", "posX": 20.0, "posY": 30.0, "type": "flight"}, {"id": "id3", "posX": 50.0, "posY": 100.0, "type": "flight"}], "relation": [{"entity1": "id1", "entity2": "id2"}, {"entity1": "id1", "entity2": "id3"}]}

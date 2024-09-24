@@ -1,0 +1,1556 @@
+[
+    {
+        "instruction": "Give me a Fortran function code named near that calculates the nearest distance between two points on a periodic domain. The function takes two input parameters of type real*8: dx (the difference between the two points) and domain (the size of the periodic domain). It returns a single output parameter of type real*8, which represents the corrected distance between the points.",
+        "test_case": {
+            "unit_test": "program main\n  use test_function\n  implicit none\n  real*8 :: dx, domain, result\n  \n  ! Test Case 1\n  dx = 2.0\n  domain = 10.0\n  result = near(dx, domain)\n  print *, result\n  \n  ! Test Case 2\n  dx = -7.5\n  domain = 20.0\n  result = near(dx, domain)\n  print *, result\n  \n  ! Test Case 3\n  dx = 12.5\n  domain = 25.0\n  result = near(dx, domain)\n  print *, result\n  \n  ! Test Case 4\n  dx = -1.0\n  domain = 5.0\n  result = near(dx, domain)\n  print *, result\n  \n  ! Test Case 5\n  dx = 0.0\n  domain = 100.0\n  result = near(dx, domain)\n  print *, result\n  \nend program main",
+            "result": [
+                "2.0000000000000000",
+                "-7.5000000000000000",
+                "-12.500000000000000",
+                "-1.0000000000000000",
+                "0.0000000000000000"
+            ]
+        },
+        "code": "  function near(dx,domain)\n\n    ! to correct for wrap-around when evaulating distances\n    ! between points\n\n    implicit none\n    real*8, intent(in) :: dx, domain\n    ! real*8, intent(out) :: near\n    real*8 :: near\n    real*8 :: hdom\n\n    hdom = 0.5*domain\n    near = dx\n    if (dx .ge. hdom) near = near - domain\n    if (dx .le. -hdom) near = near + domain\n\n  end function near\n"
+    },
+    {
+        "instruction": "Write a Fortran function named substrcount that counts the number of occurrences of a substring within a given string. The function takes two input parameters: a string (str) and a substring (substr), both of which are character variables. The function returns an integer value (substrcount) indicating the number of times the substring appears in the string.",
+        "test_case": {
+            "unit_test": "program main\n  use test_function\n  implicit none\n  character(len=100) :: str\n  character(len=10) :: substr\n  \n  !case1\n  str = \"I love Fortran programming.\"\n  substr = \"Fortran\"\n  print *, substrcount(str, substr)\n  \n  !case2\n  str = \"This is a test string.\"\n  substr = \"is\"\n  print *, substrcount(str, substr)\n  \n  !case3\n  str = \"aaaaaaaaaaaaaaaaaaaa\"\n  substr = \"aa\"\n  print *, substrcount(str, substr)\n  \n  !case4\n  str = \"1234567890\"\n  substr = \"5\"\n  print *, substrcount(str, substr)\n  \n  !case5\n  str = \"abcabcabcabcabc\"\n  substr = \"abc\"\n  print *, substrcount(str, substr)\n  \nend program main",
+            "result": [
+                "0",
+                "0",
+                "1",
+                "0",
+                "1"
+            ]
+        },
+        "code": "function substrcount(str, substr)\n  character(len=*), intent(in) :: str\n  character(len=*), intent(in) :: substr\n  integer :: substrcount\n  integer :: pos\n  integer :: step\n  substrcount = 0\n  if (len(substr) == 0) then\n    return\n  else \n    pos = 1\n    do while(.true.)\n      step = index(str(pos:), substr)     \n      if (step == 0) exit\n      substrcount = substrcount + 1 \n      pos = pos + step - 1 + len(substr)\n    end do\n  end if\nend function\n"
+    },
+    {
+        "instruction": "Write a Fortran function named int2str that converts an integer number into a string representation. The function takes one input parameter of type integer and returns a string. The function uses the \"implicit none\" statement to enforce explicit variable declarations. The function uses a character variable of length 12 to store the converted string representation. Inside the function, the \"write\" statement is used to convert the integer number into a string using the format specifier 'i9', which indicates that the integer should be formatted as a 9-digit number. The resulting string is then returned as the output of the function.",
+        "test_case": {
+            "unit_test": "program main\n  use test_function\n  implicit none\n  integer :: anumber\n  character(12) :: astring\n  \n  !case1\n  anumber = 0\n  astring = int2str(anumber)\n  print *, astring\n\n  !case2\n  anumber = 123456789\n  astring = int2str(anumber)\n  print *, astring\n\n  !case3\n  anumber = -987654321\n  astring = int2str(anumber)\n  print *, astring\n\n  !case4\n  anumber = 999999999\n  astring = int2str(anumber)\n  print *, astring\n\n  !case5\n  anumber = -123456789\n  astring = int2str(anumber)\n  print *, astring\n\nend program main",
+            "result": [
+                "0",
+                "123456789",
+                "*********",
+                "999999999",
+                "*********"
+            ]
+        },
+        "code": "  function int2str(anumber) result(astring)\n    implicit none\n    integer :: anumber\n    character(12) :: astring\n\n    write (astring,'(i9)') anumber\n\n  end function int2str\n"
+    },
+    {
+        "instruction": "Create a Fortran function called \"floorsqrt\" that calculates the floor square root of an integer number. The function takes one input parameter of type integer and returns one output parameter of type integer. The function uses a loop to find the largest integer whose square is less than or equal to the input number. If the input number is 0 or 1, the function directly returns the input number. Write the code for the function using Fortran syntax and ensure that the function is named \"floorsqrt\".",
+        "test_case": {
+            "unit_test": "program main\n  use test_function\n  implicit none\n  integer :: x, sqrtx\n  \n  !case1\n  x = 0\n  print *, floorsqrt(x)\n  \n  !case2\n  x = 1\n  print *, floorsqrt(x)\n  \n  !case3\n  x = 10\n  print *, floorsqrt(x)\n  \n  !case4\n  x = 25\n  print *, floorsqrt(x)\n  \n  !case5\n  x = 100\n  print *, floorsqrt(x)\n  \nend program main",
+            "result": [
+                "0",
+                "1",
+                "3",
+                "5",
+                "10"
+            ]
+        },
+        "code": "  function floorsqrt(x) result(sqrtx)\n    integer :: x,sqrtx\n    ! local\n    integer :: i,res\n\n    if (x == 0 .or. x == 1) then\n\n      sqrtx = x\n\n    else\n\n      res = 1\n      i = 1\n      do while (res <= x)\n        i = i + 1\n        res = i*i\n      end do\n\n      sqrtx = i - 1\n\n    end if\n\n  end function floorsqrt\n"
+    },
+    {
+        "instruction": "Provide a Fortran function code named floorcurt that calculates the largest integer whose cube is less than or equal to a given integer. The function takes one input argument of type integer and returns one output argument of type integer.",
+        "test_case": {
+            "unit_test": "program main\n  use test_function\n  implicit none\n  integer :: x, curtx\n  \n  ! Test case 1\n  x = 0\n  curtx = floorcurt(x)\n  print *, curtx\n  \n  ! Test case 2\n  x = 1\n  curtx = floorcurt(x)\n  print *, curtx\n  \n  ! Test case 3\n  x = 8\n  curtx = floorcurt(x)\n  print *, curtx\n  \n  ! Test case 4\n  x = 27\n  curtx = floorcurt(x)\n  print *, curtx\n  \n  ! Test case 5\n  x = 100\n  curtx = floorcurt(x)\n  print *, curtx\nend program main",
+            "result": [
+                "0",
+                "1",
+                "2",
+                "3",
+                "4"
+            ]
+        },
+        "code": "  function floorcurt(x) result(curtx)\n    integer :: x,curtx\n    ! local\n    integer :: i,res\n\n    if (x == 0 .or. x == 1) then\n\n      curtx = x\n\n    else\n\n      res = 1\n      i = 1\n      do while (res <= x)\n        i = i + 1\n        res = i*i*i\n      end do\n\n      curtx = i - 1\n\n    end if\n\n  end function floorcurt\n"
+    },
+    {
+        "instruction": "Write a Fortran function named \"lower_case\" that converts all uppercase characters in a given string to lowercase. The function takes one input argument of type character, which is the string to be converted. The output is also of type character, and it represents the converted string.",
+        "test_case": {
+            "unit_test": "program main\n  use test_function\n  implicit none\n  character(len=:), allocatable :: string\n\n  !case1\n  string = \"Hello World!\"\n  print *, lower_case(string)\n\n  !case2\n  string = \"FoRtRaN\"\n  print *, lower_case(string)\n\n  !case3\n  string = \"12345\"\n  print *, lower_case(string)\n\n  !case4\n  string = \"AbCdEfG\"\n  print *, lower_case(string)\n\n  !case5\n  string = \"fortran\"\n  print *, lower_case(string)\n\nend program main",
+            "result": [
+                "hello world!",
+                "fortran",
+                "12345",
+                "abcdefg",
+                "fortran"
+            ]
+        },
+        "code": "    function lower_case(string)\n        character(len=*), intent(in) :: string\n        character(len=:), allocatable :: lower_case\n\n        !! locals\n        integer :: code\n        integer :: i\n\n        allocate(lower_case, source=string)\n        do i = 1, len(string)\n            code = iachar(string(i:i))\n            select case (code)\n            case (65:90)\n                lower_case(i:i) = char(code + 32)\n            end select\n        end do\n\n    end function lower_case\n"
+    },
+    {
+        "instruction": "Create a Fortran function named bump that calculates the value of a bump function based on the input parameters. The function takes 3 input arguments, all of type real(8), and 1 output argument, also of type real(8). The input arguments are named y, amp, and wid, and the output argument is named bump. The function calculates the value of the bump function using the following formula: bump = amp * exp(-rr/wid**2), where rr is calculated as (y-50d0)**2.",
+        "test_case": {
+            "unit_test": "program main\n  use test_function\n  implicit none\n  real(8) :: y, amp, wid\n\n  !case1\n  y = 50.0\n  amp = 1.0\n  wid = 1.0\n  print *, bump(y, amp, wid)\n\n  !case2\n  y = 30.0\n  amp = 2.0\n  wid = 0.5\n  print *, bump(y, amp, wid)\n\n  !case3\n  y = 70.0\n  amp = 0.5\n  wid = 1.5\n  print *, bump(y, amp, wid)\n\n  !case4\n  y = 90.0\n  amp = 1.0\n  wid = 2.0\n  print *, bump(y, amp, wid)\n\n  !case5\n  y = 10.0\n  amp = 0.2\n  wid = 0.1\n  print *, bump(y, amp, wid)\n  \nend program main",
+            "result": [
+                "1.0000000000000000",
+                "0.0000000000000000",
+                "3.0978623068834514E-078",
+                "1.9151695967140057E-174",
+                "0.0000000000000000"
+            ]
+        },
+        "code": "  function bump(y,amp,wid)\n    implicit none\n    real(8)::y,amp,wid,bump,rr\n    rr=(y-50d0)**2!+(z+10d0)**2\n    bump=amp*exp(-rr/wid**2)\n    return\n  end function\n"
+    },
+    {
+        "instruction": "Please create a Fortran function named \"sbend\" that calculates the bending of a particle trajectory. The function takes three input arguments, all of which are of type real(8): \"y\", \"amp\", and \"wid\". The function returns a single output, also of type real(8), named \"sbend\". \n\nInside the function, the bending is computed using the formula \"sbend = amp * wid * sqrt(1.0 + ((y - 0d0) / wid)**2)\".",
+        "test_case": {
+            "unit_test": "program main\n  use test_function\n  implicit none\n  real(8) :: y, amp, wid, result\n  \n  !case1\n  y = 0.5\n  amp = 1.0\n  wid = 0.1\n  result = sbend(y, amp, wid)\n  print *, result\n\n  !case2\n  y = -0.8\n  amp = 2.0\n  wid = 0.5\n  result = sbend(y, amp, wid)\n  print *, result\n\n  !case3\n  y = 1.2\n  amp = 0.5\n  wid = 0.8\n  result = sbend(y, amp, wid)\n  print *, result\n\n  !case4\n  y = -0.5\n  amp = 1.5\n  wid = 0.2\n  result = sbend(y, amp, wid)\n  print *, result\n\n  !case5\n  y = 0.0\n  amp = 1.0\n  wid = 1.0\n  result = sbend(y, amp, wid)\n  print *, result\nend program main",
+            "result": [
+                "0.50990195165151420",
+                "1.8867962466291759",
+                "0.72111027823669360",
+                "0.80777472273042128",
+                "1.0000000000000000"
+            ]
+        },
+        "code": "  function sbend(y,amp,wid)\n    implicit none\n    real(8)::y,amp,wid,sbend\n    !sbend=amp*tanh((y-0d0)/wid)\n    sbend=amp*wid*sqrt(1.0+((y-0d0)/wid)**2)\n  end function\n"
+    },
+    {
+        "instruction": "Provide a Fortran function code named is_numeric to determine if a given string is a numeric value. The function takes a single input argument of type character(len=*), representing the string to be tested. The function returns a logical value indicating whether the string is numeric or not.",
+        "test_case": {
+            "unit_test": "program main\n  use test_function\n  implicit none\n  character(len=10) :: string\n  \n  !case1\n  string = \"12345\"\n  print *, is_numeric(string)\n  \n  !case2\n  string = \"3.14\"\n  print *, is_numeric(string)\n  \n  !case3\n  string = \"Hello\"\n  print *, is_numeric(string)\n  \n  !case4\n  string = \"10e5\"\n  print *, is_numeric(string)\n  \n  !case5\n  string = \"-1.23\"\n  print *, is_numeric(string)\n  \nend program main",
+            "result": [
+                "T",
+                "T",
+                "F",
+                "T",
+                "T"
+            ]
+        },
+        "code": "function is_numeric(string)\n  implicit none\n  character(len=*), intent(in) :: string\n  logical :: is_numeric\n  real :: x\n  integer :: e\n  read(string,*,iostat=e) x\n  is_numeric = e == 0\nend function is_numeric\n"
+    },
+    {
+        "instruction": "Give me a Fortran function code named istep to calculate the step function. The function takes in one input argument of type real(8) named x. The function returns one output argument of type real(8) named out. \n\nThe function istep checks the value of x and assigns a value to out based on the following conditions:\n- If x is less than 0.0d0, out is assigned the value 1.0d0.\n- If x is equal to 0.0d0, out is assigned the value 0.50d0.\n- If none of the above conditions are met, out is assigned the value 0.0d0.\n\nWrite the Fortran function istep to calculate the step function.",
+        "test_case": {
+            "unit_test": "program main\n  use test_function\n  implicit none\n  real(8) :: x\n  real(8) :: out\n  \n  !case1\n  x = 2.0d0\n  out = istep(x)\n  print *, out\n  \n  !case2\n  x = -5.0d0\n  out = istep(x)\n  print *, out\n  \n  !case3\n  x = 0.0d0\n  out = istep(x)\n  print *, out\n  \n  !case4\n  x = 10.0d0\n  out = istep(x)\n  print *, out\n  \n  !case5\n  x = -2.5d0\n  out = istep(x)\n  print *, out\n\nend program main",
+            "result": [
+                "0.0000000000000000",
+                "1.0000000000000000",
+                "0.50000000000000000",
+                "0.0000000000000000",
+                "1.0000000000000000"
+            ]
+        },
+        "code": "  elemental function istep(x) result(out)!,beta) result(out)\n    real(8),intent(in) :: x!, beta \n    real(8)            :: out\n    ! if(x*beta > 100.d0)then\n    !    fermi=0.d0\n    !    return\n    ! endif\n    ! fermi = 1.d0/(1.d0+exp(beta*x))\n    if(x < 0.d0) then\n       out = 1.0d0\n    elseif(x==0.d0)then\n       out = 0.50d0\n    else\n       out = 0.0d0\n    endif\n  end function istep\n"
+    },
+    {
+        "instruction": "Give me a Fortran function code named factorial to compute the factorial of a given integer number. The function takes one input parameter of type integer and returns one output parameter of type integer.",
+        "test_case": {
+            "unit_test": "program main\n  use test_function\n  implicit none\n  integer :: n\n  \n  !case1\n  n = 5\n  print *, factorial(n)\n  \n  !case2\n  n = 10\n  print *, factorial(n)\n  \n  !case3\n  n = 0\n  print *, factorial(n)\n  \n  !case4\n  n = 3\n  print *, factorial(n)\n  \n  !case5\n  n = 7\n  print *, factorial(n)\nend program main",
+            "result": [
+                "120",
+                "3628800",
+                "1",
+                "6",
+                "5040"
+            ]
+        },
+        "code": "function factorial (n) result (res)\n!==============================================================================\n \nimplicit none\ninteger, intent (in) :: n\ninteger :: res\ninteger :: i\nres = product ((/(i, i = 1, n)/))\nend function factorial\n"
+    },
+    {
+        "instruction": "Create a recursive Fortran function named \"fib\" to calculate the Fibonacci sequence up to a given input number \"n\". The function takes an integer \"n\" as input and returns an integer \"res\" as output. The function uses a recursive approach to calculate the Fibonacci sequence, where if \"n\" is less than 2, \"res\" is set to \"n\". If \"n\" is between 2 and 19, \"res\" is computed by recursively calling the \"fib\" function for \"n-1\" and \"n-2\", and summing the results. If \"n\" is 20 or greater, the function uses OpenMP tasks to parallelize the computation of \"x\" and \"y\" by asynchronously calling the \"fib\" function for \"n-1\" and \"n-2\" in separate tasks, and then waits for the tasks to complete before summing the results to compute \"res\".",
+        "test_case": {
+            "unit_test": "program main\n  use test_function\n  implicit none\n  integer :: n\n  integer :: res\n  \n  !case1\n  n = 0\n  res = fib(n)\n  print *, res\n  \n  !case2\n  n = 1\n  res = fib(n)\n  print *, res\n  \n  !case3\n  n = 5\n  res = fib(n)\n  print *, res\n  \n  !case4\n  n = 10\n  res = fib(n)\n  print *, res\n  \n  !case5\n  n = 15\n  res = fib(n)\n  print *, res\nend program main",
+            "result": [
+                "0",
+                "1",
+                "5",
+                "55",
+                "610"
+            ]
+        },
+        "code": "recursive function fib(n) result(res)\n  implicit none\n\n  integer, intent(in) :: n\n  integer :: res\n\n  integer :: x,y\n  \n  if (n<2) then\n     res=n\n  else if (n<20) then\n     x = fib(n-1)\n     y = fib(n-2)\n     res=x+y\n  else\n     !$omp task default(none) shared(x,n)\n     x = fib(n-1)\n     !$omp end task\n     !$omp task default(none) shared(y,n)\n     y = fib(n-2)\n     !$omp end task\n     !$omp taskwait     \n     res=x+y\n  end if\nend function fib\n"
+    },
+    {
+        "instruction": "Write a Fortran function code named \"mandelbrot\" that calculates the number of iterations required for a complex number to escape a specific threshold. The function takes three input arguments: two real numbers (x and y) and an integer (maxit). The function returns an integer representing the number of iterations (it).",
+        "test_case": {
+            "unit_test": "program main\n  use test_function\n  implicit none\n  real :: x, y\n  integer :: maxit, it\n  \n  !case1\n  x = -0.5\n  y = 0.0\n  maxit = 1000\n  it = mandelbrot(x, y, maxit)\n  print *, it\n  \n  !case2\n  x = 0.5\n  y = 0.5\n  maxit = 1000\n  it = mandelbrot(x, y, maxit)\n  print *, it\n\n  !case3\n  x = -1.0\n  y = 1.0\n  maxit = 1000\n  it = mandelbrot(x, y, maxit)\n  print *, it\n\n  !case4\n  x = 0.1\n  y = 0.2\n  maxit = 1000\n  it = mandelbrot(x, y, maxit)\n  print *, it\n\n  !case5\n  x = -0.6\n  y = 0.5\n  maxit = 1000\n  it = mandelbrot(x, y, maxit)\n  print *, it\nend program main",
+            "result": [
+                "1000",
+                "5",
+                "3",
+                "1000",
+                "12"
+            ]
+        },
+        "code": "  function mandelbrot(x, y, maxit) result (it)\n    implicit none\n    real,    intent(in) :: x, y\n    integer, intent(in) :: maxit\n    integer :: it\n    complex :: z, c\n    z = cmplx(0, 0)\n    c = cmplx(x, y)\n    it = 0\n    do while (abs(z) < 2.0 .and. it < maxit)\n       z = z*z + c\n       it = it + 1\n    end do\n  end function mandelbrot\n"
+    },
+    {
+        "instruction": "Write a Fortran function named begtrm that determines the position of the first non-blank character in a given string. The function takes one input parameter, a character string, and returns one output parameter, an integer representing the position of the first non-blank character.",
+        "test_case": {
+            "unit_test": "program main\n  use test_function\n  implicit none\n  character(len=100) :: val\n  \n  !case1\n  val = '   Hello World'\n  print *, begtrm(val)\n  \n  !case2\n  val = 'No leading spaces'\n  print *, begtrm(val)\n  \n  !case3\n  val = '  Multiple leading spaces'\n  print *, begtrm(val)\n  \n  !case4\n  val = '    '\n  print *, begtrm(val)\n  \n  !case5\n  val = 'Leading Tab'\n  print *, begtrm(CHAR(9) // val) ! Add tab character before the string\n  \nend program main",
+            "result": [
+                "4",
+                "1",
+                "3",
+                "1",
+                "1"
+            ]
+        },
+        "code": "function begtrm(val)\n!\nimplicit none\n!\n\n!\ncharacter(*) :: val\ninteger :: begtrm\n!\n! local variables\n!\ninteger :: idx\ninteger :: len\n!\n!     + + + argument declarations + + +\n!\n!     + + + argument definitions + + +\n!\n!     + + + parameters + + +\n!\n!     + + + local variables + + +\n!\n!\n!     + + + end specifications + + +\n!\ndo idx = 1,len(val)\n  if (val(idx:idx).ne.' ') then\n     begtrm = idx\n     return\n  end if\nend do\n! \nbegtrm = 1\n!\nend function begtrm\n"
+    },
+    {
+        "instruction": "Provide a Fortran function code named pythag, which computes the length of the hypotenuse of a right triangle using the Pythagorean theorem. The function takes two double precision input arguments, a and b, representing the lengths of the two sides of the triangle. The function returns a double precision output, pythag, representing the length of the hypotenuse.",
+        "test_case": {
+            "unit_test": "program main\n  use test_function\n  implicit none\n  double precision :: a, b, result\n  \n  !case1\n  a = 3.0\n  b = 4.0\n  result = pythag(a, b)\n  print *, result\n\n  !case2\n  a = -5.0\n  b = 12.0\n  result = pythag(a, b)\n  print *, result\n\n  !case3\n  a = 0.0\n  b = 0.0\n  result = pythag(a, b)\n  print *, result\n\n  !case4\n  a = 1.234\n  b = -5.678\n  result = pythag(a, b)\n  print *, result\n\n  !case5\n  a = 1000.0\n  b = 0.001\n  result = pythag(a, b)\n  print *, result\nend program main",
+            "result": [
+                "5.0000000000000000",
+                "13.000000000000000",
+                "0.0000000000000000",
+                "5.8105455524190983",
+                "1000.0000000005000"
+            ]
+        },
+        "code": "      function pythag(a,b)\n      implicit none\n      double precision ::  a, b, pythag \n      double precision :: absa, absb\n      absa=abs(a)\n      absb=abs(b)\n      if (absa > absb) then\n         pythag=absa*sqrt(1.+(absb/absa)**2)\n      else\n         if(absb == 0.) then\n            pythag=0.\n         else\n            pythag=absb*sqrt(1.+(absa/absb)**2)\n         endif\n      endif\n\n      end function pythag\n"
+    },
+    {
+        "instruction": "Give me a Fortran function code named binomial that calculates the binomial coefficient using the formula C(n, k) = n! / (k! * (n-k)!), where n and k are integers. The function takes two input arguments of type integer*8, n and k. The function returns an output argument of type integer*8, binomial, which represents the computed binomial coefficient.",
+        "test_case": {
+            "unit_test": "program main\n  use test_function\n  implicit none\n  integer*8 :: n, k, result\n  \n  !case1\n  n = 5\n  k = 2\n  result = binomial(n, k)\n  print *, result\n  \n  !case2\n  n = 10\n  k = 3\n  result = binomial(n, k)\n  print *, result\n  \n  !case3\n  n = 7\n  k = 4\n  result = binomial(n, k)\n  print *, result\n  \n  !case4\n  n = 15\n  k = 8\n  result = binomial(n, k)\n  print *, result\n  \n  !case5\n  n = 20\n  k = 5\n  result = binomial(n, k)\n  print *, result\nend program main",
+            "result": [
+                "3",
+                "0",
+                "140",
+                "51480",
+                "0"
+            ]
+        },
+        "code": "  pure function binomial(n,k)\n    implicit none\n    integer*8, intent(in) :: n,k\n    integer*16            :: temp\n    integer*8             :: i,binomial\n\n    temp=1\n    do i=n-k+1,n\n       temp=temp*i\n    end do\n    do i=1,n-k\n       temp=temp/i\n    end do\n    binomial=temp\n  end function binomial\n"
+    },
+    {
+        "instruction": "Give me a Fortran function code named gcd to calculate the greatest common divisor of two given integers. The number of input arguments is 2 and the data type is 8-byte integer. The number of output arguments is 1 and the data type is integer.",
+        "test_case": {
+            "unit_test": "program main\n  use test_function\n  implicit none\n  integer*8 :: a0, b0, result\n  \n  !case1\n  a0 = 15\n  b0 = 25\n  result = gcd(a0, b0)\n  print *, result\n\n  !case2\n  a0 = 42\n  b0 = 56\n  result = gcd(a0, b0)\n  print *, result\n\n  !case3\n  a0 = 100\n  b0 = 75\n  result = gcd(a0, b0)\n  print *, result\n\n  !case4\n  a0 = 123456789\n  b0 = 987654321\n  result = gcd(a0, b0)\n  print *, result\n\n  !case5\n  a0 = 0\n  b0 = 15\n  result = gcd(a0, b0)\n  print *, result\nend program main",
+            "result": [
+                "5",
+                "14",
+                "25",
+                "9",
+                "15"
+            ]
+        },
+        "code": "  pure function gcd(a0,b0)\n    implicit none\n    integer*8, intent(in) :: a0, b0\n    integer               :: a, b, t, gcd\n\n    a=a0\n    b=b0\n    do while (b /= 0)\n       t=b\n       b=mod(a,b)\n       a=t\n    end do\n    gcd=a\n  end function gcd\n"
+    },
+    {
+        "instruction": "Provide a Fortran function named is_prime that checks if a given integer is a prime number. The function takes one input argument of type integer and returns a logical value.",
+        "test_case": {
+            "unit_test": "program main\n  use test_function\n  implicit none\n  integer*8 :: n\n  \n  !case1\n  n = 2\n  print *, is_prime(n)\n  \n  !case2\n  n = 3\n  print *, is_prime(n)\n  \n  !case3\n  n = 10\n  print *, is_prime(n)\n  \n  !case4\n  n = 97\n  print *, is_prime(n)\n  \n  !case5\n  n = 100\n  print *, is_prime(n)\n\nend program main",
+            "result": [
+                "T",
+                "T",
+                "F",
+                "T",
+                "F"
+            ]
+        },
+        "code": "  pure function is_prime(n)\n    implicit none\n    integer*8, intent(in) :: n\n    integer               :: i\n    logical               :: is_prime\n\n    if (n == 1) then\n       is_prime = .false.\n    else\n       is_prime = .true.\n       do i=2,min(n-1,ceiling(sqrt(dble(n))))\n          if (mod(n,i) == 0) then\n             is_prime = .false.\n             exit\n          end if\n       end do\n    end if\n  end function is_prime\n"
+    },
+    {
+        "instruction": "Give me a Fortran function code named sum_of_divisors to calculate the sum of divisors of a given number. The function takes an input integer argument and returns an output integer argument. The number of input arguments is 1 and the data type is integer*8. The number of output arguments is 1 and the data type is integer*8.",
+        "test_case": {
+            "unit_test": "program main\n  use test_function\n  implicit none\n  integer*8 :: n\n\n  !case1\n  n = 12\n  print *, sum_of_divisors(n)\n\n  !case2\n  n = 28\n  print *, sum_of_divisors(n)\n\n  !case3\n  n = 36\n  print *, sum_of_divisors(n)\n\n  !case4\n  n = 100\n  print *, sum_of_divisors(n)\n\n  !case5\n  n = 496\n  print *, sum_of_divisors(n)\n  \nend program main",
+            "result": [
+                "16",
+                "28",
+                "55",
+                "117",
+                "496"
+            ]
+        },
+        "code": "  pure function sum_of_divisors(n)\n    implicit none\n    integer*8, intent(in) :: n\n    integer*8             :: i\n    integer*8             :: sum_of_divisors\n\n    sum_of_divisors=1\n    do i=2,n-1\n       if (mod(n,i) == 0) then\n          sum_of_divisors=sum_of_divisors+i\n       end if\n    end do\n  end function sum_of_divisors\n"
+    },
+    {
+        "instruction": "Write a Fortran function called \"is_triangular\" that checks if a given integer is a triangular number. The function takes in one input argument of type integer and returns a logical value.",
+        "test_case": {
+            "unit_test": "program main\n  use test_function\n  implicit none\n  integer :: m\n  \n  !case1\n  m = 6\n  print *, \"Is\", m, \"a triangular number?\", is_triangular(m)\n\n  !case2\n  m = 10\n  print *, \"Is\", m, \"a triangular number?\", is_triangular(m)\n\n  !case3\n  m = 15\n  print *, \"Is\", m, \"a triangular number?\", is_triangular(m)\n\n  !case4\n  m = 16\n  print *, \"Is\", m, \"a triangular number?\", is_triangular(m)\n\n  !case5\n  m = 21\n  print *, \"Is\", m, \"a triangular number?\", is_triangular(m)\n\nend program main",
+            "result": [
+                "Is           6 a triangular number? T",
+                "Is          10 a triangular number? T",
+                "Is          15 a triangular number? T",
+                "Is          16 a triangular number? F",
+                "Is          21 a triangular number? T"
+            ]
+        },
+        "code": "  pure function is_triangular(m)\n    implicit none\n    integer, intent(in) :: m\n    double precision    :: temp\n    logical             :: is_triangular,plus,minus\n\n    temp=(1 + sqrt(1.0 + 4*2*m))/2\n    plus=(temp>0) .and. (mod(temp,1.0)==0.0)\n    temp=(1 - sqrt(1.0 + 4*2*m))/2\n    minus=(temp>0) .and. (mod(temp,1.0)==0.0)\n    is_triangular=plus .or. minus\n\n  end function is_triangular\n"
+    },
+    {
+        "instruction": "Create a Fortran function called is_square that determines whether a given integer is a perfect square. The function takes in one input argument of type integer and returns a logical value indicating whether the input is a square or not. The function should be implemented with the \"pure\" attribute for guaranteeing pure functional behavior.",
+        "test_case": {
+            "unit_test": "program main\n  use test_function\n  implicit none\n  integer :: m\n  \n  !case1\n  m = 4\n  print *, is_square(m)\n\n  !case2\n  m = 9\n  print *, is_square(m)\n\n  !case3\n  m = 16\n  print *, is_square(m)\n\n  !case4\n  m = 25\n  print *, is_square(m)\n\n  !case5\n  m = 30\n  print *, is_square(m)\nend program main\n    ",
+            "result": [
+                "T",
+                "T",
+                "T",
+                "T",
+                "F"
+            ]
+        },
+        "code": "  pure function is_square(m)\n    implicit none\n    integer, intent(in) :: m\n    logical             :: is_square\n\n    is_square=mod(sqrt(dble(m)),1.0)==0.0\n\n  end function is_square\n"
+    },
+    {
+        "instruction": "Write a Fortran function named is_heptagonal to determine if a given number is a heptagonal number. The function takes an integer input parameter named \"m\". The function returns a logical output value indicating whether the number is heptagonal or not.",
+        "test_case": {
+            "unit_test": "program main\n  use test_function\n  implicit none\n  integer :: m\n  \n  !case1\n  m = 7\n  print *, is_heptagonal(m)\n\n  !case2\n  m = 15\n  print *, is_heptagonal(m)\n\n  !case3\n  m = 21\n  print *, is_heptagonal(m)\n\n  !case4\n  m = 50\n  print *, is_heptagonal(m)\n\n  !case5\n  m = 100\n  print *, is_heptagonal(m)\n\nend program main",
+            "result": [
+                "T",
+                "F",
+                "F",
+                "F",
+                "F"
+            ]
+        },
+        "code": "  pure function is_heptagonal(m)\n    implicit none\n    integer, intent(in) :: m\n    double precision    :: temp\n    logical             :: is_heptagonal,plus,minus\n\n    temp=(3 + sqrt(9.0 + 4*5*2*m))/10\n    plus=(temp>0) .and. (mod(temp,1.0)==0.0)\n    temp=(3 - sqrt(9.0 + 4*5*2*m))/10\n    minus=(temp>0) .and. (mod(temp,1.0)==0.0)\n    is_heptagonal=plus .or. minus\n\n  end function is_heptagonal\n"
+    },
+    {
+        "instruction": "Write a Fortran function called es_wexler that calculates the saturation water vapor pressure (es) based on the temperature (t) and atmospheric pressure (p) inputs. The function takes in two real numbers as input parameters and returns a real number as the output parameter. \n\nThe function uses the Wexler formulation with new coefficients to calculate the saturation water vapor pressure. It first checks if the temperature is above or below the freezing point (273.15 K). If it's above, it uses coefficients specific to water vapor pressure over water. If it's below, it uses coefficients specific to water vapor pressure over ice. \n\nThe function then calculates the saturation water vapor pressure using exponential equations with the respective coefficients. Additionally, an enhancement factor is computed based on the temperature and pressure, and applied to adjust the saturation water vapor pressure. \n\nFinally, the function returns the calculated saturation water vapor pressure (es) in hPa.",
+        "test_case": {
+            "unit_test": "program main\n  use test_function\n  implicit none\n  real :: t, p\n\n  !case1\n  t = 298.15\n  p = 1013.25\n  print *, es_wexler(t, p)\n\n  !case2\n  t = 273.15\n  p = 1000.0\n  print *, es_wexler(t, p)\n\n  !case3\n  t = 310.0\n  p = 950.0\n  print *, es_wexler(t, p)\n\n  !case4\n  t = 250.0\n  p = 800.0\n  print *, es_wexler(t, p)\n\n  !case5\n  t = 293.0\n  p = 1050.0\n  print *, es_wexler(t, p)\nend program main",
+            "result": [
+                "1.00410843",
+                "1.00381529",
+                "1.00436270",
+                "1.00338840",
+                "1.00409687"
+            ]
+        },
+        "code": "function es_wexler(t, p)\n        !saturation water vapor pressure (es) using wexler formulation with new coefficients (adjusted for its-90)\n        !input : t = temperature (in kelvins)\n        !        p = atmospheric pressure (in hpa)\n        !output: es= saturation water vapor pressure (in hpa)\n        !references:\n        !1)\n        !wexler, a. vapor pressure formulation for water in range 0 to 100 degrees c. a revision.\n        !j. res. natl. bur. stand. 1976, 80a, 775\u2013785.\n        !2)\n        !wexler, a. vapor pressure formulation for ice. j. res. natl. bur. stand. 1977, 81a, 5\u201320.\n        !3)\n        !hardy, b. its-90 formulations for water vapor pressure, frostpoint temperature, dewpoint temperature, and enhancement factors in range -100 to +100 c.\n        !in proceedings of the third international symposium on humidity and moisture;\n        !uk national physical laboratory (npl): teddington, uk, april 6 1998; pp. 1\u20138.\n\treal, intent(in) :: t, p\n  \treal             :: es_wexler   \n        real :: g0, g1, g2, g3, g4, g5, g6, g7, a0, a1, a2, a3, b0, b1, b2, b3, &\n                k0, k1, k2, k3, k4, k5, es, alpha, beta, f                \n\n        if ( t >= 273.15 ) then\n\t\t! saturation vapor pressure over water\n                g0 =-2.8365744d3\n                g1 =-6.028076559d3\n                g2 = 1.954263612d1\n                g3 =-2.737830188d-2\n                g4 = 1.6261698d-5\n                g5 = 7.0229056d-10\n                g6 =-1.8680009d-13\n                g7 = 2.7150305\n                es = 0.01 * exp(g0*t**(-2) + g1*t**(-1) + g2 + g3*t + g4*t**2 + g5*t**3 + g6*t**4 + g7*log(t))\n\n                ! enhancement factor coefficients for water 0 to 100\u00b0c\n                a0 =-1.6302041d-1\n                a1 = 1.8071570d-3\n                a2 =-6.7703064d-6\n                a3 = 8.5813609d-9\n                b0 =-5.9890467d1\n                b1 = 3.4378043d-1\n                b2 =-7.7326396d-4\n                b3 = 6.3405286d-7\n\telse\n                ! saturation vapor pressure over ice\n                k0 =-5.8666426d3\n                k1 = 2.232870244d1\n                k2 = 1.39387003d-2\n                k3 =-3.4262402d-5\n                k4 = 2.7040955d-8\n                k5 = 6.7063522d-1\n                es = 0.01 * exp(k0*t**(-1) + k1 + k2*t + k3*t**2 + k4*t**3 + k5*log(t))\n\n                ! enhancement factor coefficients for ice \u2013100 to 0\u00b0c\n                a0 =-6.0190570d-2\n                a1 = 7.3984060d-4\n                a2 =-3.0897838d-6\n                a3 = 4.3669918d-9\n                b0 =-9.4868712d1\n                b1 = 7.2392075d-1\n                b2 =-2.1963437d-3\n                b3 = 2.4668279d-6\n\tend if \n        ! enhancement factor\n        alpha = a0 + a1*t + a2*t**2 + a3*t**3\n        beta = exp(b0 + b1*t + b2*t**2 + b3*t**3)\n        f = exp( alpha*(1-es/p) + beta*(p/es-1) )\n        es = es * f\n\treturn\nend function\n"
+    },
+    {
+        "instruction": "Give me a Fortran function code named gauss_wt to calculate the Gaussian weight for a given input value of lag. The number of input arguments is 1 and the data type is real. The number of output arguments is 1 and the data type is real. The function uses the formula exp(-(lag**2.0/(2.0*sigma**2.0))), where sigma is a predefined constant equal to 1000.0. The function returns the calculated Gaussian weight.",
+        "test_case": {
+            "unit_test": "program main\n  use test_function\n  implicit none\n  real :: lag\n  \n  !case1\n  lag = 0.0\n  print *, gauss_wt(lag)\n\n  !case2\n  lag = 1.0\n  print *, gauss_wt(lag)\n\n  !case3\n  lag = -1.5\n  print *, gauss_wt(lag)\n\n  !case4\n  lag = 2.3\n  print *, gauss_wt(lag)\n\n  !case5\n  lag = -0.8\n  print *, gauss_wt(lag)\nend program main",
+            "result": [
+                "1.00000000",
+                "0.999999523",
+                "0.999998868",
+                "0.999997377",
+                "0.999999702"
+            ]
+        },
+        "code": "function gauss_wt(lag)\nimplicit none\nreal                                :: lag,gauss_wt\nreal,parameter                      :: sigma=1000.0 !1000 km \n!---\ngauss_wt=exp(-(lag**2.0/(2.0*sigma**2.0)))  \n!---\nreturn\n!---\nend function gauss_wt\n"
+    },
+    {
+        "instruction": "Give me a Fortran function code named getinterval to find the upper and lower indices of a sorted 1-dimensional array where a given value lies. The function takes two input arguments: an array of real numbers and a single real value. The function returns an array of two integers representing the left and right indices.",
+        "test_case": {
+            "unit_test": "program main\n  use test_function\n  implicit none\n  real, allocatable :: a(:)\n  real :: x\n  integer, dimension(2) :: indx\n  \n  !case1\n  allocate(a(5))\n  a = [1.0, 2.0, 3.0, 4.0, 5.0]\n  x = 3.5\n  indx = getinterval(a,x)\n  print *, indx\n  deallocate(a)\n\n  !case2\n  allocate(a(8))\n  a = [-2.0, -1.0, 0.0, 1.0, 2.0, 3.0, 4.0, 5.0]\n  x = -1.5\n  indx = getinterval(a,x)\n  print *, indx\n  deallocate(a)\n\n  !case3\n  allocate(a(6))\n  a = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]\n  x = 0.0\n  indx = getinterval(a,x)\n  print *, indx\n  deallocate(a)\n\n  !case4\n  allocate(a(10))\n  a = [0.0, 1.0, 1.0, 2.0, 2.0, 2.0, 3.0, 3.0, 4.0, 4.0]\n  x = 2.5\n  indx = getinterval(a,x)\n  print *, indx\n  deallocate(a)\n\n  !case5\n  allocate(a(7))\n  a = [1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0]\n  x = 8.0\n  indx = getinterval(a,x)\n  print *, indx\n  deallocate(a)\nend program main",
+            "result": [
+                "3           4",
+                "1           2",
+                "3           3",
+                "6           7",
+                "6           7"
+            ]
+        },
+        "code": "  function getinterval(a,x) result(indx)\n    !! returns upper and lower indices of a 1-d sorted array \n    !! using binary search in which a search value lies \n    real, intent(in), dimension(:) :: a \n    real, intent(in) :: x\n    integer, dimension(2) :: indx  ! left and right indices \n    integer :: n, i\n\n    n = size(a,1)\n    indx(1) = 1\n    indx(2) = n\n\n    ! binary search algorithm\n    do while ((indx(1) .ne. indx(2)) .and. (indx(2) .ne. (indx(1)+1)))\n      i = floor((indx(1)+indx(2))*0.5)\n      if (x < a(i)) then\n        indx(2) = i\n      elseif (x > a(i)) then\n        indx(1) = i\n      else\n        indx(1) = i\n        indx(2) = i\n      endif\n    enddo\n\n    ! check end cases\n    if (abs(a(indx(1))-x) .le. epsilon(1.)) then\n      indx(2) = indx(1)\n    elseif (abs(a(indx(2))-x) .le. epsilon(1.)) then\n      indx(1) = indx(2)\n    endif\n  end function getinterval\n"
+    },
+    {
+        "instruction": "Provide a Fortran function code named getbilinearinterp that calculates bilinear interpolation for a given set of input values. The function takes the following input parameters: x (queried x value), y (queried y value), xvec (array of x values), yvec (array of y values), f11, f12, f21, and f22 (values corresponding to the corners of a square grid). The function returns a single floating-point value.",
+        "test_case": {
+            "unit_test": "program main\n  use test_function\n  implicit none\n  real :: x, y\n  real, dimension(2) :: xvec, yvec\n  real :: f11, f12, f21, f22\n  \n  !case1\n  x = 0.5\n  y = 0.5\n  xvec = [0.0, 1.0]\n  yvec = [0.0, 1.0]\n  f11 = 1.0\n  f12 = 2.0\n  f21 = 3.0\n  f22 = 4.0\n  print *, getbilinearinterp(x, y, xvec, yvec, f11, f12, f21, f22)\n\n  !case2\n  x = 0.2\n  y = 0.8\n  xvec = [0.0, 1.0]\n  yvec = [0.0, 1.0]\n  f11 = -1.0\n  f12 = 0.0\n  f21 = 2.0\n  f22 = 3.0\n  print *, getbilinearinterp(x, y, xvec, yvec, f11, f12, f21, f22)\n\n  !case3\n  x = 1.5\n  y = 1.5\n  xvec = [1.0, 2.0]\n  yvec = [1.0, 2.0]\n  f11 = -2.0\n  f12 = -1.0\n  f21 = 0.0\n  f22 = 1.0\n  print *, getbilinearinterp(x, y, xvec, yvec, f11, f12, f21, f22)\n\n  !case4\n  x = -1.0\n  y = 2.0\n  xvec = [-2.0, 0.0]\n  yvec = [1.0, 3.0]\n  f11 = 0.0\n  f12 = 1.0\n  f21 = 2.0\n  f22 = 3.0\n  print *, getbilinearinterp(x, y, xvec, yvec, f11, f12, f21, f22)\n\n  !case5\n  x = 0.75\n  y = 0.25\n  xvec = [0.0, 1.0]\n  yvec = [0.0, 1.0]\n  f11 = -3.0\n  f12 = -2.0\n  f21 = -1.0\n  f22 = 0.0\n  print *, getbilinearinterp(x, y, xvec, yvec, f11, f12, f21, f22)\nend program main",
+            "result": [
+                "2.50000000",
+                "0.400000066",
+                "-0.500000000",
+                "1.50000000",
+                "-1.25000000"
+            ]
+        },
+        "code": "  function getbilinearinterp(x,y,xvec,yvec,f11,f12,f21,f22)\n    !! returns bilinearly interpolated values at (x,y)\n    real, intent(in) :: x !! queried x\n    real, intent(in) :: y !! queried y\n    real, intent(in), dimension(2) :: xvec\n    real, intent(in), dimension(2) :: yvec\n    real, intent(in) :: f11, f12, f21, f22\n    real :: getbilinearinterp\n    real, dimension(2,2) :: fmat\n\n    fmat(1,:) = (/f11,f12/)\n    fmat(2,:) = (/f21,f22/)\n\n    getbilinearinterp = dot_product((/xvec(2)-x,x-xvec(1)/),matmul(fmat,(/yvec(2)-y,y-yvec(1)/)))\n    getbilinearinterp = getbilinearinterp/(xvec(2)-xvec(1))/(yvec(2)-yvec(1))\n\n  end function getbilinearinterp\n"
+    },
+    {
+        "instruction": "Provide a Fortran function named sign_func that determines the relationship between three integer values. The function takes three input arguments of type integer (a, m, n) and returns an integer. The function checks if the value of a is equal to either m or n. If a is equal to m, the function returns 1. If a is equal to n, the function returns -1. If a is not equal to either m or n, the function returns 0.",
+        "test_case": {
+            "unit_test": "program main\n  use test_function\n  implicit none\n  integer :: a, m, n\n  \n  !case1\n  a = 10\n  m = 10\n  n = 5\n  print *, sign_func(a, m, n)\n  \n  !case2\n  a = 5\n  m = 10\n  n = 5\n  print *, sign_func(a, m, n)\n  \n  !case3\n  a = 15\n  m = 10\n  n = 5\n  print *, sign_func(a, m, n)\n  \n  !case4\n  a = -10\n  m = -10\n  n = 0\n  print *, sign_func(a, m, n)\n  \n  !case5\n  a = 0\n  m = -10\n  n = 0\n  print *, sign_func(a, m, n)\nend program main",
+            "result": [
+                "1",
+                "-1",
+                "0",
+                "1",
+                "-1"
+            ]
+        },
+        "code": "function sign_func(a,m,n)\nimplicit none\ninteger::sign_func\ninteger::a,n,m\n!\n!     distinct three cases: actual atom a is atom m, atom n or none of them\n!\nif (a .eq. m) then\n   sign_func=1\nelse if (a .eq. n) then\n   sign_func=-1\nelse \n   sign_func=0\nend if\n\nreturn\nend function sign_func\n"
+    },
+    {
+        "instruction": "Provide a Fortran function code named hyp2f1 to compute the hypergeometric function 2F1 using the power series method. The function takes four input arguments of type real: a, b, c, and z. It returns a single output argument of type real, which represents the value of the hypergeometric function. The function uses a loop to iteratively calculate the terms of the power series until convergence or a maximum number of iterations is reached. The maximum number of iterations is set to 1000.",
+        "test_case": {
+            "unit_test": "program main\n  use test_function\n  implicit none\n  real :: a, b, c, z\n  \n  !case1\n  a = 0.5\n  b = 1.5\n  c = 2.5\n  z = 0.2\n  print *, hyp2f1(a, b, c, z)\n\n  !case2\n  a = -1.0\n  b = 0.5\n  c = 1.0\n  z = 0.5\n  print *, hyp2f1(a, b, c, z)\n\n  !case3\n  a = 2.0\n  b = 3.0\n  c = 4.0\n  z = 0.8\n  print *, hyp2f1(a, b, c, z)\n\n  !case4\n  a = 1.5\n  b = 2.5\n  c = 3.5\n  z = 0.3\n  print *, hyp2f1(a, b, c, z)\n\n  !case5\n  a = -2.0\n  b = -1.0\n  c = 1.5\n  z = 0.6\n  print *, hyp2f1(a, b, c, z)\n  \nend program main",
+            "result": [
+                "1.06740284",
+                "0.750000000",
+                "9.26439857",
+                "1.45276773",
+                "1.80000007"
+            ]
+        },
+        "code": "  elemental function hyp2f1(a, b, c, z) result(f1)\n    real, intent(in) :: a, b, c, z\n    integer, parameter :: itmax = 1000\n    real :: aa, bb, cc, f1, fac, temp\n    integer :: n\n\n    fac = 1.\n    temp = fac\n    aa = a\n    bb = b\n    cc = c\n    do n = 1, itmax\n      fac = fac * ((aa * bb) / cc) * z / n\n      f1 = temp + fac\n      if(f1 == temp) return\n      temp = f1\n      aa = aa + 1.\n      bb = bb + 1.\n      cc = cc + 1.\n    end do\n  end function\n"
+    },
+    {
+        "instruction": "Write a Fortran function named \"compar\" that compares two integer values. The function takes two input arguments of type integer with a size of 8 bytes. The function returns an output argument of type integer with a size of 2 bytes. The purpose of the function is to compare the values of the input arguments and return -1 if the first argument is smaller, 1 if the first argument is larger, and 0 if both arguments are equal.",
+        "test_case": {
+            "unit_test": "program main\n  use test_function\n  implicit none\n  integer(8) :: arg1, arg2\n  integer(2) :: result\n\n  !case1\n  arg1 = 5\n  arg2 = 10\n  result = compar(arg1, arg2)\n  print *, result\n\n  !case2\n  arg1 = -5\n  arg2 = -10\n  result = compar(arg1, arg2)\n  print *, result\n\n  !case3\n  arg1 = 1000000\n  arg2 = 1000000\n  result = compar(arg1, arg2)\n  print *, result\n\n  !case4\n  arg1 = 0\n  arg2 = 0\n  result = compar(arg1, arg2)\n  print *, result\n\n  !case5\n  arg1 = -100\n  arg2 = 200\n  result = compar(arg1, arg2)\n  print *, result\nend program main",
+            "result": [
+                "-1",
+                "1",
+                "0",
+                "0",
+                "-1"
+            ]
+        },
+        "code": "    function compar (arg1,arg2)\n    integer(2) :: compar\n    integer(8) :: arg1, arg2\n    if (arg1 < arg2) then\n        compar = -1\n    else if (arg1 > arg2) then\n        compar = 1\n    else\n        compar = 0\n    end if\n    end function compar\n"
+    },
+    {
+        "instruction": "Provide a Fortran function named \"in_circle\" to determine if a given point is inside a circle. The function takes three arguments, all of type real(16), which are the x and y coordinates of the point and the radius of the circle. The function returns a logical value indicating whether the point is inside the circle.",
+        "test_case": {
+            "unit_test": "program main\n  use test_function\n  implicit none\n  real(16) :: pos_x, pos_y, r\n\n  !case1\n  pos_x = 0.0\n  pos_y = 0.0\n  r = 1.0\n  print *, in_circle(pos_x, pos_y, r)\n\n  !case2\n  pos_x = 2.0\n  pos_y = 2.0\n  r = 1.0\n  print *, in_circle(pos_x, pos_y, r)\n\n  !case3\n  pos_x = -1.0\n  pos_y = 1.0\n  r = 2.0\n  print *, in_circle(pos_x, pos_y, r)\n\n  !case4\n  pos_x = 3.0\n  pos_y = -2.0\n  r = 3.0\n  print *, in_circle(pos_x, pos_y, r)\n\n  !case5\n  pos_x = 0.5\n  pos_y = 0.5\n  r = 0.1\n  print *, in_circle(pos_x, pos_y, r)\n\nend program main",
+            "result": [
+                "T",
+                "F",
+                "T",
+                "F",
+                "F"
+            ]
+        },
+        "code": "function in_circle(pos_x, pos_y, r)\n    implicit none\n    real(16), intent(in) :: pos_x, pos_y, r\n    logical              :: in_circle\n\n    in_circle = (pos_x ** 2 + pos_y ** 2) < r ** 2\n\nend function in_circle \n"
+    },
+    {
+        "instruction": "Write a Fortran function code named day_of_week that calculates the day of the week for a given date. The function takes three input arguments: d (day), m (month), and y (year), all of integer type. The output of the function is an integer representing the day of the week, where Sunday is 0, Monday is 1, and so on.",
+        "test_case": {
+            "unit_test": "program main\n  use test_function\n  implicit none\n  integer :: d, m, y, result\n  \n  !case1\n  d = 1\n  m = 1\n  y = 2022\n  result = day_of_week(d, m, y)\n  print *, result\n\n  !case2\n  d = 31\n  m = 12\n  y = 2022\n  result = day_of_week(d, m, y)\n  print *, result\n\n  !case3\n  d = 15\n  m = 6\n  y = 2030\n  result = day_of_week(d, m, y)\n  print *, result\n\n  !case4\n  d = 20\n  m = 3\n  y = 1998\n  result = day_of_week(d, m, y)\n  print *, result\n\n  !case5\n  d = 29\n  m = 2\n  y = 2024\n  result = day_of_week(d, m, y)\n  print *, result\nend program main",
+            "result": [
+                "5",
+                "0",
+                "0",
+                "6",
+                "3"
+            ]
+        },
+        "code": "function day_of_week(d, m, y)\n  integer :: day_of_week\n  integer, intent(in) :: d, m, y\n  integer :: j, k\n\n  j = y / 100\n  k = mod(y, 100)\n  day_of_week = mod(d + (m+1)*26/10 + k + k/4 + j/4 + 5*j, 7)\n\nend function day_of_week\n"
+    },
+    {
+        "instruction": "Give me a Fortran function code named legendre_p to calculate the value of the Legendre polynomial of order n at a given value of x. The function takes two input arguments, an integer n and a double precision number x. The function returns a double precision value, which is the computed Legendre polynomial value.",
+        "test_case": {
+            "unit_test": "program main\n  use test_function\n  implicit none\n  integer :: n\n  double precision :: x\n  double precision :: result\n\n  !case1\n  n = 0\n  x = 0.5\n  result = legendre_p(n, x)\n  print *, result\n\n  !case2\n  n = 2\n  x = 0.7\n  result = legendre_p(n, x)\n  print *, result\n\n  !case3\n  n = 3\n  x = -0.2\n  result = legendre_p(n, x)\n  print *, result\n\n  !case4\n  n = 4\n  x = 1.2\n  result = legendre_p(n, x)\n  print *, result\n\n  !case5\n  n = 5\n  x = -0.8\n  result = legendre_p(n, x)\n  print *, result\n\nend program main",
+            "result": [
+                "1.0000000000000000",
+                "0.23499997496604941",
+                "0.28000000357627869",
+                "4.0470010128022018",
+                "0.39951998565911973"
+            ]
+        },
+        "code": "   elemental function legendre_p(n, x)\n\n      integer, intent(in) :: n\n      double precision, intent(in) :: x\n      integer :: k\n      double precision :: p, p1, p2, legendre_p\n\n      select case (n)\n      case (0)\n         legendre_p = dble(1.0)\n      case (1)\n         legendre_p = x\n      case default\n         p1 = x\n         p2 = dble(1.0)\n         do k = 2, n\n            p = ((2 * k - 1) * x * p1 - (k - 1) * p2) / k\n            p2 = p1\n            p1 = p\n         end do\n         legendre_p = p\n      end select\n\n   end function legendre_p\n"
+    },
+    {
+        "instruction": "Write a Fortran function code named \"is_leap_year\" to determine if a given year is a leap year or not. The function takes an integer input parameter \"year\". It returns a logical output parameter \"is_leap_year\", which is true if the year is a leap year and false otherwise.",
+        "test_case": {
+            "unit_test": "program main\n  use test_function\n  implicit none\n  integer :: year\n  \n  !case1: leap year\n  year = 2000\n  print *, is_leap_year(year)\n  \n  !case2: not a leap year\n  year = 1900\n  print *, is_leap_year(year)\n  \n  !case3: leap year\n  year = 2020\n  print *, is_leap_year(year)\n  \n  !case4: not a leap year\n  year = 2019\n  print *, is_leap_year(year)\n  \n  !case5: leap year\n  year = 2400\n  print *, is_leap_year(year)\n  \nend program main",
+            "result": [
+                "T",
+                "F",
+                "T",
+                "F",
+                "T"
+            ]
+        },
+        "code": "  elemental function is_leap_year( year )\n    integer, intent(in) :: year\n    logical :: is_leap_year\n\n    is_leap_year = ( (mod(year,4)   == 0) .and. &\n                     (mod(year,100) /= 0)       ) .or. &\n                   (mod(year,400) == 0)\n\n  end function is_leap_year\n"
+    },
+    {
+        "instruction": "Create a Fortran function named st_idx_in_array that checks whether a given integer index exists in a one-dimensional integer array. The function takes two input parameters: idx, which is the index to be searched for, and array, which is the one-dimensional integer array. The function returns a logical value (true or false) indicating whether the index exists in the array.",
+        "test_case": {
+            "unit_test": "program main\n  use test_function\n  implicit none\n  integer :: idx\n  integer, allocatable :: array(:)\n  \n  !case1\n  idx = 5\n  allocate(array(5))\n  array = [1, 2, 3, 4, 5]\n  print *, st_idx_in_array(idx, array)\n  deallocate(array)\n\n  !case2\n  idx = -3\n  allocate(array(6))\n  array = [-5, -4, -3, -2, -1, 0]\n  print *, st_idx_in_array(idx, array)\n  deallocate(array)\n\n  !case3\n  idx = 10\n  allocate(array(4))\n  array = [10, 20, 30, 40]\n  print *, st_idx_in_array(idx, array)\n  deallocate(array)\n  \n  !case4\n  idx = 1\n  allocate(array(3))\n  array = [0, 0, 0]\n  print *, st_idx_in_array(idx, array)\n  deallocate(array)\n\n  !case5\n  idx = 100\n  allocate(array(5))\n  array = [100, -200, 300, -400, 500]\n  print *, st_idx_in_array(idx, array)\n  deallocate(array)\nend program main\n    ",
+            "result": [
+                "T",
+                "T",
+                "T",
+                "F",
+                "T"
+            ]
+        },
+        "code": "function st_idx_in_array(idx, array) result(exists)\n!===============================================================================\n!  return .true. if idx is in array\n   integer, intent(in) :: idx\n   integer, intent(in), dimension(:) :: array\n   logical :: exists\n   integer :: ii\n\n   exists = .false.\n   do ii = 1, size(array)\n      if (idx == array(ii)) then\n         exists = .true.\n         return\n      endif\n   enddo\nend function st_idx_in_array\n"
+    },
+    {
+        "instruction": "Provide a Fortran function code named \"pi\" that calculates an approximation of the value of pi using a Monte Carlo method. The function accepts one input parameter of type integer, representing the number of samples to be used in the calculation. The function returns a single output value of type real, which represents the approximate value of pi.",
+        "test_case": {
+            "unit_test": "program main\n  use test_function\n  implicit none\n  integer :: samples_num\n  \n  !case1\n  samples_num = 1000\n  print *, pi(samples_num)\n  \n  !case2\n  samples_num = 10000\n  print *, pi(samples_num)\n  \n  !case3\n  samples_num = 100000\n  print *, pi(samples_num)\n  \n  !case4\n  samples_num = 1000000\n  print *, pi(samples_num)\n  \n  !case5\n  samples_num = 10000000\n  print *, pi(samples_num)\n  \nend program main",
+            "result": [
+                "3.14400005",
+                "3.14720011",
+                "3.14955997",
+                "3.13985610",
+                "3.14164329"
+            ]
+        },
+        "code": "    function pi(samples_num) result(pi_value)\n        ! declaring input parameter\n        integer, intent(in) :: samples_num\n        ! declaring local vaariables\n        real :: pi_value, length\n        real, dimension(2) :: coordinates\n        integer :: i, in_circle\n\n        in_circle = 0\n        do i = 1, samples_num\n            call random_number(coordinates)\n            coordinates = coordinates * 2 - 1\n            length = sqrt(coordinates(1) * coordinates(1) + coordinates(2) * coordinates(2))\n            if ( length <= 1 ) then\n                in_circle = in_circle + 1\n            end if\n        end do\n        pi_value = 4.0  * real(in_circle) / real(samples_num)\n    end function pi\n"
+    },
+    {
+        "instruction": "Write a Fortran function code named strfromlogical that converts a logical value to a string representation. The code takes one input argument of type logical and returns a string of length 5. Follow these instructions to complete the task.",
+        "test_case": {
+            "unit_test": "program main\n  use test_function\n  implicit none\n  logical :: l\n  \n  !case1\n  l = .true.\n  print *, strfromlogical(l)\n\n  !case2\n  l = .false.\n  print *, strfromlogical(l)\n\n  !case3\n  l = .true.\n  print *, strfromlogical(l)\n\n  !case4\n  l = .false.\n  print *, strfromlogical(l)\n\n  !case5\n  l = .true.\n  print *, strfromlogical(l)\nend program main",
+            "result": [
+                "true",
+                "false",
+                "true",
+                "false",
+                "true"
+            ]
+        },
+        "code": "        pure function strfromlogical(l) result(str)\n            logical, intent(in) :: l\n            character(len=5) :: str\n            if (l) then\n                str = \"true\"\n            else\n                str = \"false\"\n            end if\n        end function\n"
+    },
+    {
+        "instruction": "Provide a Fortran function code named find_intersection_between_segments that determines if two line segments intersect. The function takes four input parameters of type real, each representing the x and y coordinates of two endpoints of the line segments. The output is a logical value indicating whether the line segments intersect or not.",
+        "test_case": {
+            "unit_test": "program main\n  use test_function\n  implicit none\n  real(kind=8), dimension(2) :: pt1, pt2, pt3, pt4\n  logical :: solution\n  \n  !case1\n  pt1 = [0.0_8, 0.0_8]\n  pt2 = [2.0_8, 2.0_8]\n  pt3 = [-1.0_8, -1.0_8]\n  pt4 = [1.0_8, 1.0_8]\n  solution = find_intersection_between_segments(pt1, pt2, pt3, pt4)\n  print *, solution\n\n  !case2\n  pt1 = [0.0_8, 0.0_8]\n  pt2 = [2.0_8, 2.0_8]\n  pt3 = [3.0_8, 3.0_8]\n  pt4 = [5.0_8, 5.0_8]\n  solution = find_intersection_between_segments(pt1, pt2, pt3, pt4)\n  print *, solution\n\n  !case3\n  pt1 = [0.0_8, 0.0_8]\n  pt2 = [2.0_8, 2.0_8]\n  pt3 = [1.0_8, 1.0_8]\n  pt4 = [3.0_8, 3.0_8]\n  solution = find_intersection_between_segments(pt1, pt2, pt3, pt4)\n  print *, solution\n\n  !case4\n  pt1 = [-1.5_8, 0.0_8]\n  pt2 = [1.5_8, 0.0_8]\n  pt3 = [0.0_8, -1.0_8]\n  pt4 = [0.0_8, 1.0_8]\n  solution = find_intersection_between_segments(pt1, pt2, pt3, pt4)\n  print *, solution\n\n  !case5\n  pt1 = [-1.0_8, -1.0_8]\n  pt2 = [1.0_8, 1.0_8]\n  pt3 = [-1.0_8, 1.0_8]\n  pt4 = [1.0_8, -1.0_8]\n  solution = find_intersection_between_segments(pt1, pt2, pt3, pt4)\n  print *, solution\n  \nend program main",
+            "result": [
+                "F",
+                "F",
+                "F",
+                "T",
+                "T"
+            ]
+        },
+        "code": "  function find_intersection_between_segments(pt1,pt2,pt3,pt4) result(solution)\n\n      logical :: solution\n      real(kind=8),dimension(2)::pt1,pt2,pt3,pt4\n      real(kind=8),dimension(2)::p13,p43,p21\n      real(kind=8)::num_a,num_b,denom,mua,mub\n\n      solution=.false.\n      p21(1)=pt2(1)-pt1(1)\n      p21(2)=pt2(2)-pt1(2)\n      p43(1)=pt4(1)-pt3(1)\n      p43(2)=pt4(2)-pt3(2)\n      p13(1)=pt1(1)-pt3(1)\n      p13(2)=pt1(2)-pt3(2)\n      denom=p43(2)*p21(1)-p43(1)*p21(2)\n      num_a=p43(1)*p13(2)-p43(2)*p13(1)\n      num_b=p21(1)*p13(2)-p21(2)*p13(1)\n      if(denom==0.0_8)then\n         return\n      else\n         mua=num_a/denom\n         mub=num_b/denom\n         if(mua>=0.0_8 .and. mua<=1.0_8)then\n            solution = .true.\n            return\n         else\n            return\n         endif\n      endif\n\n   end function find_intersection_between_segments\n"
+    },
+    {
+        "instruction": "Write a Fortran function code named \"sum_div\" to calculate the sum of divisors for a given positive integer. The function takes one input argument of type integer(4) and returns one output argument of the same type. The name of the function is \"sum_div\".",
+        "test_case": {
+            "unit_test": "program main\n  use test_function\n  implicit none\n  integer(4) :: n\n  \n  !case1\n  n = 10\n  print *, sum_div(n)\n  \n  !case2\n  n = 24\n  print *, sum_div(n)\n  \n  !case3\n  n = 36\n  print *, sum_div(n)\n  \n  !case4\n  n = 100\n  print *, sum_div(n)\n  \n  !case5\n  n = 1234567890\n  print *, sum_div(n)\n  \nend program main",
+            "result": [
+                "8",
+                "36",
+                "55",
+                "117",
+                "1977042798"
+            ]
+        },
+        "code": "  pure function sum_div(n)\n    ! default\n    implicit none\n\n    integer(4), intent(in) :: n\n    integer(4)             :: sum_div\n\n    ! local variables\n    integer(4) :: i1,i2,nmax\n\n    ! figure out max number to try\n    nmax = int(sqrt(1d0*n))\n\n    ! 1 is always a divisor\n    sum_div = 1\n    do i1=2,nmax\n       if (mod(n,i1)==0) then\n          ! work out if a perfect square\n          i2 = n/i1\n          if (i2 /= i1) then\n             sum_div = sum_div + i1 + i2\n          else\n             sum_div = sum_div + i1\n          endif\n       endif\n    enddo\n\n    return\n  end function sum_div\n"
+    },
+    {
+        "instruction": "Please provide a Fortran function named \"length\" that calculates the length of a given string. The function should have one input parameter of type \"character\" and one output parameter of type \"integer\". The function should iterate through the characters of the input string and return the length of the string, excluding any trailing whitespace characters.",
+        "test_case": {
+            "unit_test": "program main\n  use test_function\n  implicit none\n  character(len=100) :: str\n  \n  !case1\n  str = 'Hello World'\n  print *, length(str)\n\n  !case2\n  str = 'Fortran is awesome'\n  print *, length(str)\n\n  !case3\n  str = 'The quick brown fox jumps over the lazy dog'\n  print *, length(str)\n\n  !case4\n  str = '1234567890'\n  print *, length(str)\n\n  !case5\n  str = ''\n  print *, length(str)\nend program main",
+            "result": [
+                "5",
+                "7",
+                "3",
+                "10",
+                "0"
+            ]
+        },
+        "code": "  function length(str)\n    !returns the lengths of a string\n    integer :: length,i\n    character(*) :: str\n    do i=1,len(str)\n       if (str(i:i).eq.' ') then\n          length=i-1\n          return\n       end if\n    end do\n    length=len(str)\n  end function length\n"
+    },
+    {
+        "instruction": "Provide a Fortran function code named combine_strings that concatenates two character strings. The function takes two input arguments of type character, and the lengths of these arguments can be of any size (indicated by len=*). The function returns a character string named c, with a length equal to the sum of the lengths of the input strings.",
+        "test_case": {
+            "unit_test": "program main\n  use test_function\n  implicit none\n  character(len=20) :: a, b, c\n  \n  !case1\n  a = \"Hello\"\n  b = \"World\"\n  c = combine_strings(a, b)\n  print *, c\n\n  !case2\n  a = \"Fortran\"\n  b = \"Expert\"\n  c = combine_strings(a, b)\n  print *, c\n\n  !case3\n  a = \"This is a\"\n  b = \" test case\"\n  c = combine_strings(a, b)\n  print *, c\n\n  !case4\n  a = \"12345\"\n  b = \"67890\"\n  c = combine_strings(a, b)\n  print *, c\n\n  !case5\n  a = \"Programming \"\n  b = \"Language\"\n  c = combine_strings(a, b)\n  print *, c\nend program main",
+            "result": [
+                "HelloWorld",
+                "FortranExpert",
+                "This is atest case",
+                "1234567890",
+                "ProgrammingLanguage"
+            ]
+        },
+        "code": "  pure function combine_strings(a,b) result(c)\n    implicit none\n    character(len=*), intent(in) :: a\n    character(len=*), intent(in) :: b\n    character(len=len_trim(a)+len_trim(b)) :: c\n    c=trim(a)//trim(adjustl(b))\n  end function combine_strings\n"
+    },
+    {
+        "instruction": "Give me a Fortran function code named is_comment to determine if a line of code is a comment. The function takes in two input parameters: a character string \"line\" and an integer \"last\". The function returns a logical value indicating whether the line is a comment or not.\n\nTo understand the code, the function checks if the line is empty (last = 0) and considers it as a comment. If the line is not empty, it checks for the first non-blank character in the line. If the character is \"#\" or if the line consists only of one character, it considers the line as a comment.\n\nWrite an instruction for the function-level code.",
+        "test_case": {
+            "unit_test": "program main\n  use test_function\n  implicit none\n  character(len=100) :: line\n  integer :: last\n  logical :: comment\n\n  !case1\n  line = \"This is a comment line\"\n  last = len_trim(line)\n  print *, is_comment(line, last)\n\n  !case2\n  line = \"        #        \"\n  last = len_trim(line)\n  print *, is_comment(line, last)\n\n  !case3\n  line = \"This is not a comment line\"\n  last = len_trim(line)\n  print *, is_comment(line, last)\n\n  !case4\n  line = \"#\"\n  last = len_trim(line)\n  print *, is_comment(line, last)\n\n  !case5\n  line = \"        This is not a comment line      \"\n  last = len_trim(line)\n  print *, is_comment(line, last)\n\nend program main",
+            "result": [
+                "F",
+                "T",
+                "F",
+                "T",
+                "F"
+            ]
+        },
+        "code": "    function is_comment( line, last ) result(comment)\n        \n        character(len=*), intent(in) :: line\n        integer, intent(in)          :: last\n        logical                      :: comment\n        \n      ! determine if line is a comment line\n        \n        character(len=1)             :: c\n        integer                      :: i\n        \n        comment = .false.\n        if (last == 0) then\n            comment = .true.\n            return\n        end if\n        c = \" \"\n        ! go to first non-blank char\n        char_loop : do i=1,last\n            c = line(i:i)\n            if (c /= \" \" .and. c /= char(9) .and. c /= char(10) .and. c /= char(13)) exit char_loop\n        end do char_loop\n        if (c == \"#\" .or. i-1 == last) comment = .true.\n        return\n        \n    end function is_comment\n"
+    },
+    {
+        "instruction": "Write a Fortran function named \"add_two_big_nums\" that calculates the sum of two large numbers provided as input strings. The function takes two input parameters of type character, representing the two numbers to be added. The function returns a single output parameter of type character, which represents the sum of the two numbers.\n\nTo use the function, pass two large numbers as input strings and assign the returned value to a character variable to store the sum of the numbers.",
+        "test_case": {
+            "unit_test": "program main\n  use test_function\n  implicit none\n  character(100) :: a, b\n  \n  !case1\n  a = '123456789012345678901234567890'\n  b = '987654321098765432109876543210'\n  print *, add_two_big_nums(a, b)\n  \n  !case2\n  a = '123456789012345678901234567890'\n  b = '0'\n  print *, add_two_big_nums(a, b)\n  \n  !case3\n  a = '0'\n  b = '987654321098765432109876543210'\n  print *, add_two_big_nums(a, b)\n  \n  !case4\n  a = '999999999999999999999999999999'\n  b = '1'\n  print *, add_two_big_nums(a, b)\n  \n  !case5\n  a = '111111111111111111111111111111'\n  b = '222222222222222222222222222222'\n  print *, add_two_big_nums(a, b)\n  \nend program main",
+            "result": [
+                "1111111110111111111011111111100",
+                "123456789012345678901234567890",
+                "987654321098765432109876543210",
+                "1000000000000000000000000000000",
+                "333333333333333333333333333333"
+            ]
+        },
+        "code": "  pure function add_two_big_nums(a,b)\n    ! default\n    implicit none\n\n    ! local parameters\n    integer(4), parameter :: i_max    = int(log10(1d0*huge(int(1,kind=4))/10))-1\n    integer(4), parameter :: i_max_10 = 10**(i_max)\n\n    character(*), intent(in) :: a,b\n    character(len=:), allocatable :: add_two_big_nums\n\n    ! local variables\n    integer(4)     :: i,i1,i2,j,idx\n    integer(4)     :: carry,n_words,temp\n    integer(4)     :: a_size,b_size,o_size\n    integer(4)     :: a_words,b_words,o_words\n    logical        :: include_pad\n    character(11)  :: zero_pad\n    character(100) :: read_tag,write_tag\n\n    ! local arrays\n    integer(4), dimension(:), allocatable :: a_int,b_int,o_int\n\n    ! find the number of digits of the numbers\n    a_size = len_trim(a)\n    b_size = len_trim(b)\n\n    ! determine how many words we need\n    a_words = ceiling(1d0*a_size/i_max)\n    b_words = ceiling(1d0*b_size/i_max)\n    o_words = a_words+b_words\n\n    ! allocate necessary arrays\n    allocate(a_int(o_words))\n    allocate(b_int(o_words))\n    allocate(o_int(o_words))\n\n    ! initialize\n    a_int = 0\n    b_int = 0\n    o_int = 0\n\n    ! break the inputs into words\n    ! we actually store the numbers backwards in our arrays\n    n_words = 1 + a_size/i_max\n    write(read_tag,'(a,i12,a)') '(i',i_max,')'\n    do i=1,n_words\n       i1 = max(a_size - i*i_max + 1, 1)\n       i2 = a_size - (i-1)*i_max\n       read(a(i1:i2),trim(read_tag)) a_int(i)\n    enddo\n\n    n_words = 1 + b_size/i_max\n    do i=1,n_words\n       i1 = max(b_size - i*i_max + 1,1)\n       i2 = b_size - (i-1)*i_max\n       read(b(i1:i2),trim(read_tag)) b_int(i)\n    enddo\n\n    ! add the numbers together one word at a time, and carry the results\n    carry = 0\n    do i=1,o_words\n       temp = a_int(i) + b_int(i) + carry\n       ! only save the amount that will fit in i_max digits\n       o_int(i) = mod(temp,i_max_10)\n       ! carry the rest\n       carry = temp/i_max_10\n    enddo\n\n    ! determine the final number of digits that we need to save our number\n    ! first check to see if we over-allocated the number of words needed\n    do while (o_int(o_words) == 0)\n       o_words = o_words - 1\n    enddo\n    o_size = 1 + int(log10(1d0*o_int(o_words))) + i_max*(o_words-1)\n\n    allocate(character(len=o_size) :: add_two_big_nums)\n\n    ! write out the answer\n    write(write_tag,'(a,i11,a)') '(i',i_max,')'\n\n    ! we actually go from right-to-left, since the big number is stored in\n    !   the array as \"little-endian\" but we read the number as \"big-endian\"\n    do i=1,o_words\n       ! find the bounds of this segment\n       i1 = max(o_size - i*i_max + 1, 1)\n       i2 = o_size - (i-1)*i_max\n\n       ! find the size of the write tag to make\n       ! first, test to see if the segment is all zeros\n       if (o_int(i)==0) then\n          do idx=1,i_max\n             write(zero_pad(idx:idx),'(a)') '0'\n          enddo\n          write(write_tag,'(a,i11,a)') '(a',i_max,')'\n          write(add_two_big_nums(i1:i2),write_tag) trim(zero_pad)\n          cycle\n       endif \n\n       ! now check to see if we need to pad with leading zeros\n       include_pad = .false.\n       do j=1,i2-i1\n          ! test to see if segment needs leading zeros\n          if (mod(o_int(i),10**j)==o_int(i)) then\n             include_pad = .true.\n             write(write_tag,'(a,i11,a,i11,a)') '(a',i2-i1-j+1,',i',j,')'\n             do idx=1,i2-j+1\n                write(zero_pad(idx:idx),'(a)') '0'\n             enddo\n             exit\n          endif\n       enddo\n\n       if (include_pad) then\n          write(add_two_big_nums(i1:i2),write_tag) trim(zero_pad),o_int(i)\n       else\n          write(write_tag,'(a,i11,a)') '(i',i2-i1+1,')'\n          write(add_two_big_nums(i1:i2),write_tag) o_int(i)\n       endif\n    enddo\n\n    return\n  end function add_two_big_nums\n"
+    },
+    {
+        "instruction": "Write a Fortran function named \"correc\" that calculates the correction value for the tail area of the i-th largest of n order statistics. The function takes in two input parameters, \"i\" and \"n\", both integers. The function returns a single output parameter, \"fn_val\", of type real.",
+        "test_case": {
+            "unit_test": "program main\n  use test_function\n  implicit none\n  integer :: i, n\n  real :: fn_val\n  \n  !case1\n  i = 3\n  n = 10\n  fn_val = correc(i, n)\n  print *, fn_val\n  \n  !case2\n  i = 1\n  n = 15\n  fn_val = correc(i, n)\n  print *, fn_val\n  \n  !case3\n  i = 7\n  n = 30\n  fn_val = correc(i, n)\n  print *, fn_val\n  \n  !case4\n  i = 5\n  n = 25\n  fn_val = correc(i, n)\n  print *, fn_val\n\n  !case5\n  i = 4\n  n = 50\n  fn_val = correc(i, n)\n  print *, fn_val\n  \nend program main",
+            "result": [
+                "-2.43400009E-05",
+                "-1.61887892E-05",
+                "0.00000000",
+                "0.00000000",
+                "0.00000000"
+            ]
+        },
+        "code": "function correc(i, n) result(fn_val)\r\n\r\n! calculates correction for tail area of the i-th largest of n order statistics.\r\n\r\nimplicit none\r\n\r\ninteger, intent(in)  :: i\r\ninteger, intent(in)  :: n\r\nreal                 :: fn_val\r\n\r\nreal  :: an\r\nreal, parameter  :: c1(7) = (/ 9.5, 28.7, 1.9, 0., -7.0, -6.2, -1.6 /),  &\r\n    c2(7) = (/ -6195., -9569., -6728., -17614., -8278., -3570., 1075. /),  &\r\n    c3(7) = (/ 9.338e4, 1.7516e5, 4.1040e5, 2.1576e6, 2.376e6, 2.065e6,  &\r\n    2.065e6 /), mic = 1.e-6, c14 = 1.9e-5\r\n\r\nfn_val = c14\r\nif(i*n == 4) return\r\nfn_val = 0.0\r\nif(i < 1 .or. i > 7) return\r\nif(i /= 4 .and. n > 20) return\r\nif(i == 4 .and. n > 40) return\r\nan = n\r\nan = 1.0/(an*an)\r\nfn_val = (c1(i) + an*(c2(i) + an*c3(i)))*mic\r\nreturn\r\nend function correc\r\n"
+    },
+    {
+        "instruction": "Provide a Fortran function called initialvelocity that calculates the initial velocity of an object in orbit around the moon. The function takes two input parameters: normalizedgravity (a real number) and moonsemimajoraxis (a real number). The function returns a single output parameter, initialvelocity (a real number). To use the function, provide values for the input parameters and assign the returned value to the output parameter.",
+        "test_case": {
+            "unit_test": "program main\n  use test_function\n  implicit none\n  real(kind = 8) :: normalizedgravity, moonsemimajoraxis\n\n  !case1\n  normalizedgravity = 9.81d0\n  moonsemimajoraxis = 384400000.0d0\n  print *, initialvelocity(normalizedgravity, moonsemimajoraxis)\n\n  !case2\n  normalizedgravity = 1.62d0\n  moonsemimajoraxis = 1737400.0d0\n  print *, initialvelocity(normalizedgravity, moonsemimajoraxis)\n\n  !case3\n  normalizedgravity = 3.7d0\n  moonsemimajoraxis = 3389500.0d0\n  print *, initialvelocity(normalizedgravity, moonsemimajoraxis)\n\n  !case4\n  normalizedgravity = 24.79d0\n  moonsemimajoraxis = 2389000000.0d0\n  print *, initialvelocity(normalizedgravity, moonsemimajoraxis)\n\n  !case5\n  normalizedgravity = 8.87d0\n  moonsemimajoraxis = 1352800.0d0\n  print *, initialvelocity(normalizedgravity, moonsemimajoraxis)\nend program main",
+            "result": [
+                "1.5975071631502431E-004",
+                "9.6562299352635490E-004",
+                "1.0447997088567185E-003",
+                "1.0186621944430891E-004",
+                "2.5606192886363423E-003"
+            ]
+        },
+        "code": "function initialvelocity(normalizedgravity, moonsemimajoraxis)\n\timplicit none\n\n\treal(kind = 8), intent(in) :: normalizedgravity\n\treal(kind = 8), intent(in) :: moonsemimajoraxis\n\treal(kind = 8) :: initialvelocity\n\n\tinitialvelocity = sqrt(normalizedgravity / moonsemimajoraxis)\n\n\treturn\nend function\n"
+    },
+    {
+        "instruction": "Write a Fortran function named sigm that calculates the sigmoid function for a given input value. The sigmoid function is defined as 5 divided by the sum of 1 and the exponential function raised to the power of 0.56 multiplied by the difference between 6 and the input value. The function takes one input parameter of type double precision and returns one output parameter of type double precision.",
+        "test_case": {
+            "unit_test": "program main\n  use test_function\n  implicit none\n  double precision :: x\n  \n  !case1\n  x = 0.0\n  print *, sigm(x)\n  \n  !case2\n  x = 5.5\n  print *, sigm(x)\n  \n  !case3\n  x = -2.3\n  print *, sigm(x)\n  \n  !case4\n  x = 10.0\n  print *, sigm(x)\n  \n  !case5\n  x = 3.14159\n  print *, sigm(x)\n  \nend program main",
+            "result": [
+                "0.16784611408695632",
+                "2.1522688788425679",
+                "4.7449123759297350E-002",
+                "4.5189222955930219",
+                "0.83941235077546128"
+            ]
+        },
+        "code": "      function sigm(x)\n!----------------------------------------\n\n!----------------------------------------\n      implicit none\n      double precision :: sigm, x\n      sigm = 5/(1 + exp(0.56*(6-x)))\n      return\n      end function sigm\n"
+    },
+    {
+        "instruction": "Write a Fortran function named \"producto_cruz\" that calculates the cross product of two 3D vectors. The function takes two real arrays of size 3 as input parameters and returns a real array of size 3 as the output.",
+        "test_case": {
+            "unit_test": "program main\n  use test_function\n  implicit none\n  real(kind=8), dimension(3) :: a, b, vector\n  \n  !case1\n  a = [1.0, 2.0, 3.0]\n  b = [4.0, 5.0, 6.0]\n  vector = producto_cruz(a, b)\n  print *, vector(1), vector(2), vector(3)\n\n  !case2\n  a = [0.0, 0.0, 0.0]\n  b = [1.0, 1.0, 1.0]\n  vector = producto_cruz(a, b)\n  print *, vector(1), vector(2), vector(3)\n\n  !case3\n  a = [2.0, 3.0, 4.0]\n  b = [-1.0, 2.0, -3.0]\n  vector = producto_cruz(a, b)\n  print *, vector(1), vector(2), vector(3)\n\n  !case4\n  a = [1.0, 0.0, 0.0]\n  b = [0.0, 1.0, 0.0]\n  vector = producto_cruz(a, b)\n  print *, vector(1), vector(2), vector(3)\n\n  !case5\n  a = [2.5, 1.3, -0.8]\n  b = [-0.5, -0.9, 1.7]\n  vector = producto_cruz(a, b)\n  print *, vector(1), vector(2), vector(3)\n  \nend program main",
+            "result": [
+                "-3.0000000000000000        6.0000000000000000       -3.0000000000000000",
+                "0.0000000000000000        0.0000000000000000        0.0000000000000000",
+                "-17.000000000000000        2.0000000000000000        7.0000000000000000",
+                "0.0000000000000000        0.0000000000000000        1.0000000000000000",
+                "1.4899999892711620       -3.8500001132488251       -1.5999999642372131"
+            ]
+        },
+        "code": "function producto_cruz(a,b) result(vector)\r\n\r\n! definici\ufffdn de la funci\ufffdn prodcuto cruz con\r\n! salida como resultado de un vector 3d\r\n!\r\n! *****************************************!\r\n\r\nimplicit none\r\n\r\nreal(kind=8),dimension(3),intent(in)::a,b\r\nreal(kind=8),dimension(3) :: vector\r\n\r\n\r\nvector(1) = a(2) * b(3) - a(3) * b(2)\r\nvector(2) = a(3) * b(1) - a(1) * b(3)\r\nvector(3) = a(1) * b(2) - a(2) * b(1)\r\n\r\n\r\nend function producto_cruz\r\n"
+    },
+    {
+        "instruction": "Give me a Fortran function code named zero_check to determine if both input real numbers are non-zero. The function takes in two real numbers as input arguments and returns a logical value indicating whether both numbers are non-zero.",
+        "test_case": {
+            "unit_test": "program main\n  use test_function\n  implicit none\n  real :: a, b\n  logical :: result\n\n  !case1\n  a = 0.001\n  b = 0.002\n  result = zero_check(a, b)\n  print *, result\n\n  !case2\n  a = 0.00001\n  b = 0.00002\n  result = zero_check(a, b)\n  print *, result\n\n  !case3\n  a = 0.0001\n  b = 0.0\n  result = zero_check(a, b)\n  print *, result\n\n  !case4\n  a = 0.0\n  b = 0.0\n  result = zero_check(a, b)\n  print *, result\n\n  !case5\n  a = 0.000001\n  b = 0.0000001\n  result = zero_check(a, b)\n  print *, result\nend program main",
+            "result": [
+                "T",
+                "T",
+                "F",
+                "F",
+                "T"
+            ]
+        },
+        "code": " function zero_check(a,b) result(c)\n\n   real, intent(in) :: a,b\n   logical :: c\n\n   if (abs(a)/dy .gt. 1e-6 .and. abs(b)/dy .gt. 1e-6) then\n   !if (abs(a)/dy .gt. 5.*dy .and. abs(b)/dy .gt. 5.*dy) then\n      c = .true.\n   else\n      c = .false.\n   endif\n\n   return\n end function zero_check\n"
+    },
+    {
+        "instruction": "Write a Fortran function code named minabs that calculates the minimum absolute value between two floating-point numbers. The function takes two input arguments of type real and returns one output argument of type real.",
+        "test_case": {
+            "unit_test": "program main\n  use test_function\n  implicit none\n  real :: a, b\n\n  !case1\n  a = 10.5\n  b = 5.3\n  print *, minabs(a, b)\n\n  !case2\n  a = -2.7\n  b = 3.9\n  print *, minabs(a, b)\n\n  !case3\n  a = 0.0\n  b = 0.0\n  print *, minabs(a, b)\n\n  !case4\n  a = -100.2\n  b = -99.9\n  print *, minabs(a, b)\n\n  !case5\n  a = 8.1\n  b = -3.6\n  print *, minabs(a, b)\n  \nend program main",
+            "result": [
+                "5.30000019",
+                "-2.70000005",
+                "0.00000000",
+                "-99.9000015",
+                "-3.59999990"
+            ]
+        },
+        "code": " function minabs(a,b) result(mm)\n\n   real, intent(in) :: a,b\n   real :: a1,b1, mm\n\n   a1 = abs(a)\n   b1 = abs(b)\n   \n   if (a1 .lt. b1) then\n      mm = a\n   else\n      mm = b\n   endif\n   \n   return\n end function minabs\n"
+    },
+    {
+        "instruction": "Give me a Fortran function code named strength_zeeman to calculate the strength of the Zeeman effect for different angular momentum states. The function takes four input arguments, all of which are of type real(kind=8). The input arguments are named j_up, j_low, m_up, and m_low. The function returns a single output argument of type real(kind=8) representing the strength of the Zeeman effect, which is calculated based on the values of the input arguments.",
+        "test_case": {
+            "unit_test": "program main\n  use test_function\n  implicit none\n  real(kind=8) :: j_up, j_low, m_up, m_low, strength\n  \n  !case1\n  j_up = 1.5\n  j_low = 0.5\n  m_up = 1.0\n  m_low = 0.0\n  strength = strength_zeeman(j_up, j_low, m_up, m_low)\n  print *, strength\n  \n  !case2\n  j_up = 3.0\n  j_low = 2.5\n  m_up = -2.0\n  m_low = 1.5\n  strength = strength_zeeman(j_up, j_low, m_up, m_low)\n  print *, strength\n  \n  !case3\n  j_up = 2.5\n  j_low = 3.0\n  m_up = -1.5\n  m_low = -2.0\n  strength = strength_zeeman(j_up, j_low, m_up, m_low)\n  print *, strength\n  \n  !case4\n  j_up = 1.0\n  j_low = 1.0\n  m_up = -1.0\n  m_low = -1.0\n  strength = strength_zeeman(j_up, j_low, m_up, m_low)\n  print *, strength\n  \n  !case5\n  j_up = 4.5\n  j_low = 4.0\n  m_up = 3.0\n  m_low = -4.0\n  strength = strength_zeeman(j_up, j_low, m_up, m_low)\n  print *, strength\n\nend program main",
+            "result": [
+                "0.46875000000000000",
+                "2.3312324822569910E-310",
+                "2.3312324822569910E-310",
+                "0.50000000000000000",
+                "2.3312324822569910E-310"
+            ]
+        },
+        "code": "\tfunction strength_zeeman(j_up,j_low,m_up,m_low)\n\treal(kind=8) :: j_up, j_low, m_up, m_low, strength_zeeman, strength_zeeman2\n\n! \t\tstrength_zeeman2 = 3.d0 * w3js(int(2.d0*j_up),int(2.d0*j_low),2,int(2.d0*m_up),&\n! \t\t\t\t\t-int(2.d0*m_low),int(2.d0*(m_low-m_up)))**2\n\n\t\tif (j_up == j_low+1) then\n\t\t\tif (m_up == m_low+1) then\n\t\t\t\tstrength_zeeman = (3.d0*(j_low+m_low+1)*(j_low+m_low+2)) / (2.d0*(j_low+1.d0)*(2.d0*j_low+1.d0)*(2.d0*j_low+3.d0))\n \t\t\t\treturn\n\t\t\tendif\n\t\t\tif (m_up == m_low) then\n\t\t\t\tstrength_zeeman = (3.d0*(j_low-m_low+1)*(j_low+m_low+1)) / ((j_low+1.d0)*(2.d0*j_low+1.d0)*(2.d0*j_low+3.d0))\n \t\t\t\treturn\n\t\t\tendif\n\t\t\tif (m_up == m_low-1) then\n\t\t\t\tstrength_zeeman = (3.d0*(j_low-m_low+1)*(j_low-m_low+2)) / (2.d0*(j_low+1.d0)*(2.d0*j_low+1.d0)*(2.d0*j_low+3.d0))\n \t\t\t\treturn\n\t\t\tendif\n\t\tendif\n\n\t\tif (j_up == j_low) then\n\t\t\tif (m_up == m_low+1) then\n\t\t\t\tstrength_zeeman = (3.d0*(j_low-m_low)*(j_low+m_low+1)) / (2.d0*j_low*(j_low+1.d0)*(2.d0*j_low+1.d0))\n \t\t\t\treturn\n\t\t\tendif\n\t\t\tif (m_up == m_low) then\n\t\t\t\tstrength_zeeman = (3.d0*m_low**2) / (j_low*(j_low+1.d0)*(2.d0*j_low+1.d0))\n \t\t\t\treturn\n\t\t\tendif\n\t\t\tif (m_up == m_low-1) then\n\t\t\t\tstrength_zeeman = (3.d0*(j_low+m_low)*(j_low-m_low+1)) / (2.d0*j_low*(j_low+1.d0)*(2.d0*j_low+1.d0))\n \t\t\t\treturn\n\t\t\tendif\n\t\tendif\n\n\t\tif (j_up == j_low-1) then\n\t\t\tif (m_up == m_low+1) then\n\t\t\t\tstrength_zeeman = (3.d0*(j_low-m_low)*(j_low-m_low-2)) / (2.d0*j_low*(2.d0*j_low-1.d0)*(2.d0*j_low+1.d0))\n \t\t\t\treturn\n\t\t\tendif\n\t\t\tif (m_up == m_low) then\n\t\t\t\tstrength_zeeman = (3.d0*(j_low-m_low)*(j_low+m_low)) / (j_low*(2.d0*j_low-1.d0)*(2.d0*j_low+1.d0))\n \t\t\t\treturn\n\t\t\tendif\n\t\t\tif (m_up == m_low-1) then\n\t\t\t\tstrength_zeeman = (3.d0*(j_low+m_low)*(j_low+m_low-1)) / (2.d0*j_low*(2.d0*j_low-1.d0)*(2.d0*j_low+1.d0))\n \t\t\t\treturn\n\t\t\tendif\n\t\tendif\n\t\t\t\t\t\n\tend function strength_zeeman\n"
+    },
+    {
+        "instruction": "Write a Fortran function named \"uf_find\" to implement the union-find find algorithm. This algorithm is used to find the lowest corresponding label for a given label in a list of labels. The function takes two input parameters: an integer \"x\" which represents the label for which to find the lowest corresponding label, and an integer array \"labels\" which contains the list of labels. The function also has one output parameter, an integer \"y\", which stores the lowest corresponding label found. The function uses a loop to iterate through the labels and determine the lowest corresponding label for the given label. The labels array is modified during the process.",
+        "test_case": {
+            "unit_test": "program main\n  use test_function\n  implicit none\n  integer :: x\n  integer, allocatable :: labels(:)\n  \n  !case1\n  allocate(labels(5))\n  labels = [1, 2, 3, 4, 5]\n  x = 3\n  print *, uf_find(x, labels)\n  deallocate(labels)\n\n  !case2\n  allocate(labels(8))\n  labels = [1, 2, 3, 4, 5, 6, 7, 8]\n  x = 7\n  print *, uf_find(x, labels)\n  deallocate(labels)\n\n  !case3\n  allocate(labels(6))\n  labels = [1, 1, 1, 1, 1, 1]\n  x = 4\n  print *, uf_find(x, labels)\n  deallocate(labels)\n\n  !case4\n  allocate(labels(10))\n  labels = [1, 1, 1, 2, 2, 3, 3, 4, 4, 5]\n  x = 9\n  print *, uf_find(x, labels)\n  deallocate(labels)\n\n  !case5\n  allocate(labels(7))\n  labels = [1, 2, 3, 4, 5, 6, 7]\n  x = 6\n  print *, uf_find(x, labels)\n  deallocate(labels)\nend program main",
+            "result": [
+                "3",
+                "7",
+                "1",
+                "1",
+                "6"
+            ]
+        },
+        "code": "        function uf_find(x, labels) result(y)\n            !! union-find find algorithm:\n            !! find the lowest corresponding label.\n            !! relabelling is done when necessary.\n            integer, intent(in) :: x\n                !! label for which to find the lowest corresponding label.\n            integer, dimension(:), intent(inout) :: labels\n                !! list of labels. **labels(i)** points to the lowest\n                !! corresponding label of label **i**.\n            integer :: y, z, tmp\n\n            y = x\n            do while(labels(y) /= y)\n                y = labels(y)\n            end do\n\n            tmp = x\n            do while(labels(tmp) /= tmp)\n                z = labels(tmp)\n                labels(tmp) = y\n                tmp = z\n            end do\n        end function\n"
+    },
+    {
+        "instruction": "Give me a Fortran function code named f that calculates the value of a mathematical function. The function takes one argument of type real. The input argument is x. The output argument is f, which is also of type real. The function computes the value of the function (x^2) - (2*x) + 1.",
+        "test_case": {
+            "unit_test": "program main\n  use test_function\n  implicit none\n  real :: x\n  \n  !case1\n  x = 0.0\n  print *, f(x)\n  \n  !case2\n  x = 2.5\n  print *, f(x)\n  \n  !case3\n  x = -1.0\n  print *, f(x)\n  \n  !case4\n  x = 10.0\n  print *, f(x)\n  \n  !case5\n  x = -3.5\n  print *, f(x)\nend program main",
+            "result": [
+                "1.00000000",
+                "2.25000000",
+                "4.00000000",
+                "81.0000000",
+                "20.2500000"
+            ]
+        },
+        "code": "function f(x)\nimplicit none\nreal :: x, f\nf = (x**2) - (2*x) + 1\n! f = (x**3) + (3*(x**2)) + (3*x) + 1\n! f = x-exp(-x/3)\nend function\n"
+    },
+    {
+        "instruction": "Write a Fortran function called \"near\" that calculates the corrected distance between two points in a periodic domain. The function takes two input arguments, both of type \"real*8\", representing the distance and the domain size. The output is of type \"real*8\" and represents the corrected distance.",
+        "test_case": {
+            "unit_test": "program main\n  use test_function\n  implicit none\n  real*8 :: dist, domain\n  \n  !case1\n  dist = 1.2\n  domain = 2.0\n  print *, near(dist, domain)\n  \n  !case2\n  dist = 1.8\n  domain = 2.0\n  print *, near(dist, domain)\n  \n  !case3\n  dist = -2.5\n  domain = 5.0\n  print *, near(dist, domain)\n  \n  !case4\n  dist = 3.5\n  domain = 4.0\n  print *, near(dist, domain)\n  \n  !case5\n  dist = 0.0\n  domain = 10.0\n  print *, near(dist, domain)\n  \nend program main",
+            "result": [
+                "-0.79999995231628418",
+                "-0.20000004768371582",
+                "2.5000000000000000",
+                "-0.50000000000000000",
+                "0.0000000000000000"
+            ]
+        },
+        "code": "function near(dist,domain)\n\n! to correct for wrap-around when evaluating distances\n! between points\n\nimplicit none\nreal*8, intent(in) :: dist, domain\nreal*8 :: near\nreal*8 :: hdom\n\nhdom = 0.5*domain\nnear = dist\nif (dist .ge.  hdom) near = near - domain\nif (dist .le. -hdom) near = near + domain\n\nend function near\n"
+    },
+    {
+        "instruction": "Create a Fortran function named `interpolate_to_min` that takes in three input parameters: `x` and `y` as arrays of real numbers, and `yobs` as a single real number. The function returns a single real number. In this function, given a set of values `y` as a function of `x`, the goal is to find the value of `x` that minimizes the absolute difference between `y` and `yobs`. \n\nTo achieve this, the function first calculates the differences between `y` and `yobs`, and finds the index `mindiffloc` with the smallest absolute difference. Then, it determines the lower and upper bounds for bracketing the root. If the differences at the lower and upper bounds have opposite signs, the function performs linear interpolation to estimate the root position. Otherwise, it returns a special value `re_fill`.\n\nYour task is to implement this function, ensuring that `y` is monotonic in `x`.\n\nPlease note that the input parameters `x` and `y` are arrays of real numbers, and the input parameter `yobs` is a single real number. The output of the function is a single real number.",
+        "test_case": {
+            "unit_test": "program main\n  use test_function\n  implicit none\n  integer :: n\n  real, allocatable :: x(:), y(:)\n  real :: yobs\n  \n  !case1\n  n = 5\n  allocate(x(n), y(n))\n  x = [1.0, 2.0, 3.0, 4.0, 5.0]\n  y = [1.0, 2.0, 3.0, 2.0, 1.0]\n  yobs = 2.5\n  print *, interpolate_to_min(x, y, yobs)\n  deallocate(x, y)\n\n  !case2\n  n = 4\n  allocate(x(n), y(n))\n  x = [1.0, 2.0, 3.0, 4.0]\n  y = [2.0, 4.0, 6.0, 8.0]\n  yobs = 5.0\n  print *, interpolate_to_min(x, y, yobs)\n  deallocate(x, y)\n\n  !case3\n  n = 6\n  allocate(x(n), y(n))\n  x = [1.0, 2.0, 3.0, 4.0, 5.0, 6.0]\n  y = [5.0, 5.0, 5.0, 5.0, 5.0, 5.0]\n  yobs = 5.0\n  print *, interpolate_to_min(x, y, yobs)\n  deallocate(x, y)\n\n  !case4\n  n = 3\n  allocate(x(n), y(n))\n  x = [1.0, 2.0, 3.0]\n  y = [1.0, 2.0, 3.0]\n  yobs = 0.5\n  print *, interpolate_to_min(x, y, yobs)\n  deallocate(x, y)\n\n  !case5\n  n = 4\n  allocate(x(n), y(n))\n  x = [0.0, 1.0, 2.0, 3.0]\n  y = [0.0, 0.1, 0.2, 0.3]\n  yobs = 0.15\n  print *, interpolate_to_min(x, y, yobs)\n  deallocate(x, y)\nend program main",
+            "result": [
+                "2.50000000",
+                "2.50000000",
+                "4.59163468E-41",
+                "4.59163468E-41",
+                "1.50000000"
+            ]
+        },
+        "code": "  pure function interpolate_to_min(x, y, yobs)\n    real, dimension(:), intent(in) :: x, y \n    real,               intent(in) :: yobs\n    real                           :: interpolate_to_min\n    ! \n    ! given a set of values of y as y(x), find the value of x that minimizes abs(y - yobs)\n    !   y must be monotonic in x\n    !\n    real, dimension(size(x)) :: diff\n    real                     :: weight\n    integer                  :: npoints, mindiffloc, lowerbound, upperbound\n    ! ---------------------------------\n    npoints = size(y)\n    diff(:) = y(:) - yobs\n    mindiffloc = minloc(abs(diff), dim = 1) \n    \n    if(mindiffloc == 1) then \n      lowerbound = mindiffloc\n      upperbound = mindiffloc + 1\n    else if(mindiffloc == npoints) then\n      lowerbound = mindiffloc - 1\n      upperbound = mindiffloc\n    else\n      if(diff(mindiffloc-1) * diff(mindiffloc) < 0) then\n        lowerbound = mindiffloc-1\n        upperbound = mindiffloc\n      else \n        lowerbound = mindiffloc\n        upperbound = mindiffloc + 1\n      end if \n    end if \n    \n    if(diff(lowerbound) * diff(upperbound) < 0) then     \n      !\n      ! interpolate the root position linearly if we bracket the root\n      !\n      interpolate_to_min = x(upperbound) - & \n                           diff(upperbound) * (x(upperbound) - x(lowerbound)) / (diff(upperbound) - diff(lowerbound))\n    else \n      interpolate_to_min = re_fill\n    end if \n    \n\n  end function interpolate_to_min\n"
+    },
+    {
+        "instruction": "Provide a Fortran function code named \"two_stream_reflectance\" to compute the reflectance in a single layer using the two-stream approximation. The function takes three input parameters: tauint (real), gint (real), and w0int (real). The output parameter is two_stream_reflectance (real).",
+        "test_case": {
+            "unit_test": "program main\n  use test_function\n  implicit none\n  real :: tauint, gint, w0int\n\n  !case1\n  tauint = 0.5\n  gint = 0.8\n  w0int = 0.2\n  print *, two_stream_reflectance(tauint, gint, w0int)\n\n  !case2\n  tauint = 1.0\n  gint = 0.6\n  w0int = 0.9\n  print *, two_stream_reflectance(tauint, gint, w0int)\n\n  !case3\n  tauint = 0.2\n  gint = 0.4\n  w0int = 0.7\n  print *, two_stream_reflectance(tauint, gint, w0int)\n\n  !case4\n  tauint = 0.7\n  gint = 0.3\n  w0int = 0.5\n  print *, two_stream_reflectance(tauint, gint, w0int)\n\n  !case5\n  tauint = 0.9\n  gint = 0.1\n  w0int = 0.8\n  print *, two_stream_reflectance(tauint, gint, w0int)\n\nend program main",
+            "result": [
+                "-4.52702343E-02",
+                "0.164365306",
+                "4.07946371E-02",
+                "4.82138954E-02",
+                "0.226644516"
+            ]
+        },
+        "code": "  elemental function two_stream_reflectance(tauint, gint, w0int) \n    real, intent(in) :: tauint, gint, w0int\n    real             :: two_stream_reflectance\n    !\n    ! compute reflectance in a single layer using the two stream approximation \n    !   the code itself is from lazaros oreopoulos via steve platnick \n    !\n    ! ------------------------\n    ! local variables \n    !   for delta eddington code\n    !   xmu, gamma3, and gamma4 only used for collimated beam approximation (i.e., beam=1)\n    integer, parameter :: beam = 2\n    real,    parameter :: xmu = 0.866, minconservativew0 = 0.9999999\n    real :: tau, w0, g, f, gamma1, gamma2, gamma3, gamma4, &\n            rh, a1, a2, rk, r1, r2, r3, r4, r5, t1, t2, t3, t4, t5, beta, e1, e2, ef1, ef2, den, th\n    ! ------------------------\n\n\n    f   = gint**2\n    tau = (1 - w0int * f) * tauint\n    w0  = (1 - f) * w0int / (1 - w0int * f)\n    g   = (gint - f) / (1 - f)\n\n    ! delta-eddington (joseph et al. 1976)\n    gamma1 =  (7 - w0* (4 + 3 * g)) / 4.0\n    gamma2 = -(1 - w0* (4 - 3 * g)) / 4.0\n    gamma3 =  (2 - 3*g*xmu) / 4.0\n    gamma4 =   1 - gamma3\n\n    if (w0int > minconservativew0) then\n      ! conservative scattering\n      if (beam == 1) then\n          rh = (gamma1*tau+(gamma3-gamma1*xmu)*(1-exp(-tau/xmu)))\n          two_stream_reflectance = rh / (1 + gamma1 * tau)\n      elseif (beam == 2) then\n          two_stream_reflectance = gamma1*tau/(1 + gamma1*tau)\n      endif\n        \n    else\t!\n\n        ! non-conservative scattering\n         a1 = gamma1 * gamma4 + gamma2 * gamma3\n         a2 = gamma1 * gamma3 + gamma2 * gamma4\n\n         rk = sqrt(gamma1**2 - gamma2**2)\n         \n         r1 = (1 - rk * xmu) * (a2 + rk * gamma3)\n         r2 = (1 + rk * xmu) * (a2 - rk * gamma3)\n         r3 = 2 * rk *(gamma3 - a2 * xmu)\n         r4 = (1 - (rk * xmu)**2) * (rk + gamma1)\n         r5 = (1 - (rk * xmu)**2) * (rk - gamma1)\n         \n         t1 = (1 + rk * xmu) * (a1 + rk * gamma4)\n         t2 = (1 - rk * xmu) * (a1 - rk * gamma4)\n         t3 = 2 * rk * (gamma4 + a1 * xmu)\n         t4 = r4\n         t5 = r5\n\n         beta = -r5 / r4         \n         \n         e1 = min(rk * tau, 500.) \n         e2 = min(tau / xmu, 500.) \n         \n         if (beam == 1) then\n           den = r4 * exp(e1) + r5 * exp(-e1)\n           two_stream_reflectance  = w0*(r1*exp(e1)-r2*exp(-e1)-r3*exp(-e2))/den\n         elseif (beam == 2) then\n           ef1 = exp(-e1)\n           ef2 = exp(-2*e1)\n           two_stream_reflectance = (gamma2*(1-ef2))/((rk+gamma1)*(1-beta*ef2))\n         endif\n           \n      end if\n  end function two_stream_reflectance \n"
+    },
+    {
+        "instruction": "Give me a Fortran function code named y that represents an algebraic function. The function takes a single input argument of type real and returns a single output of type real. The function calculates the value of the algebraic expression 5*x^3 + 2*x^2 - 3*x and returns the result.",
+        "test_case": {
+            "unit_test": "program main\n  use test_function\n  implicit none\n  real :: x\n\n  !case1\n  x = 0.0\n  print *, y(x)\n\n  !case2\n  x = 1.5\n  print *, y(x)\n\n  !case3\n  x = -2.0\n  print *, y(x)\n\n  !case4\n  x = 10.0\n  print *, y(x)\n\n  !case5\n  x = -5.5\n  print *, y(x)\nend program main",
+            "result": [
+                "0.00000000",
+                "16.8750000",
+                "-26.0000000",
+                "5170.00000",
+                "-754.875000"
+            ]
+        },
+        "code": "function y(x)   !defining algebric function\r\n    implicit none\r\n    real :: y   !dummy argument\r\n    real :: x   !local variable\r\n    y=5*(x**3)+2*(x**2)-3*x\nend function\r\n"
+    },
+    {
+        "instruction": "Give me a Fortran function code named ddy to calculate the second derivative of an algebraic function. The function takes one input argument of type real and returns one output argument of type real.",
+        "test_case": {
+            "unit_test": "program main\n  use test_function\n  implicit none\n  real :: x\n\n  !case1\n  x = 0.0\n  print *, ddy(x)\n\n  !case2\n  x = -2.5\n  print *, ddy(x)\n\n  !case3\n  x = 3.7\n  print *, ddy(x)\n\n  !case4\n  x = 10.0\n  print *, ddy(x)\n\n  !case5\n  x = -4.2\n  print *, ddy(x)\n  \nend program main",
+            "result": [
+                "4.00000000",
+                "-71.0000000",
+                "115.000000",
+                "304.000000",
+                "-121.999992"
+            ]
+        },
+        "code": "function ddy(x) !second derivative of above algebric function\r\n    implicit none\r\n    real :: ddy   !dummy argument\r\n    real :: x   !local variable\r\n    ddy=30*x+4\nend function\r\n"
+    },
+    {
+        "instruction": "Give me a Fortran function code named lagrange to compute the Lagrange interpolation polynomial at a given point. The function takes in three input arguments, x (a single real number), t (an array of real numbers), and y (an array of real numbers). The function returns a single real number as the output.",
+        "test_case": {
+            "unit_test": "program main\n  use test_function\n  implicit none\n  real :: x\n  real, allocatable :: t(:), y(:)\n  \n  !case1\n  x = 2.0\n  allocate(t(3))\n  allocate(y(3))\n  t = [1.0, 2.0, 3.0]\n  y = [2.0, 4.0, 8.0]\n  print *, lagrange(x, t, y)\n  deallocate(t)\n  deallocate(y)\n\n  !case2\n  x = 0.5\n  allocate(t(4))\n  allocate(y(4))\n  t = [0.0, 1.0, 2.0, 3.0]\n  y = [1.0, 2.0, 3.0, 4.0]\n  print *, lagrange(x, t, y)\n  deallocate(t)\n  deallocate(y)\n\n  !case3\n  x = -1.0\n  allocate(t(5))\n  allocate(y(5))\n  t = [-2.0, -1.5, -1.0, -0.5, 0.0]\n  y = [4.0, 2.0, 0.0, 1.0, -1.0]\n  print *, lagrange(x, t, y)\n  deallocate(t)\n  deallocate(y)\n\n  !case4\n  x = 1.5\n  allocate(t(2))\n  allocate(y(2))\n  t = [1.0, 2.0]\n  y = [2.0, 4.0]\n  print *, lagrange(x, t, y)\n  deallocate(t)\n  deallocate(y)\n\n  !case5\n  x = -5.0\n  allocate(t(4))\n  allocate(y(4))\n  t = [-4.0, -3.0, -2.0, -1.0]\n  y = [16.0, 9.0, 4.0, 1.0]\n  print *, lagrange(x, t, y)\n  deallocate(t)\n  deallocate(y)\nend program main",
+            "result": [
+                "4.00000000",
+                "1.50000000",
+                "0.00000000",
+                "3.00000000",
+                "25.0000000"
+            ]
+        },
+        "code": "    function lagrange(x, t, y) \n        implicit none \n\n        real, intent(in)               :: x\n        real, dimension(:), intent(in) :: t, y\n        real                           :: lagrange\n\n        real                           :: coefficient\n        integer                        :: j, k\n\n        ! sanity check\n        if ( size(t) /= size(y) ) stop 'incompatible number of data between x and f(x)'\n        \n        ! initialization \n        lagrange = 0 \n        \n        ! loop through n data point \n        do j = 1, size(t)\n            coefficient = 1.0     \n\n            ! kronecker delta\n            do k = 1, size(t) \n                if ( k /= j ) & \n                    coefficient = coefficient * (x - t(k)) / (t(j) - t(k))\n            end do \n\n            lagrange = lagrange + coefficient * y(j)\n        end do\n    end function lagrange\n"
+    },
+    {
+        "instruction": "Give me a Fortran function code named fdstrse that calculates the compression length scale stress with respect to void ratio. The function takes in 4 input parameters and returns a single output parameter. The input parameters are of type real and their names are void, bmech1, bmech2, and bmech3. The output parameter is also of type real and its name is fdstrse.",
+        "test_case": {
+            "unit_test": "program main\n  use test_function\n  implicit none\n  real :: void, bmech1, bmech2, bmech3, result\n  \n  !case1\n  void = 0.5\n  bmech1 = 1.0\n  bmech2 = 2.0\n  bmech3 = 3.0\n  result = fdstrse(void, bmech1, bmech2, bmech3)\n  print *, result\n  \n  !case2\n  void = 1.0\n  bmech1 = 0.0\n  bmech2 = 2.5\n  bmech3 = 1.5\n  result = fdstrse(void, bmech1, bmech2, bmech3)\n  print *, result\n  \n  !case3\n  void = 0.2\n  bmech1 = 0.5\n  bmech2 = 0.1\n  bmech3 = 0.3\n  result = fdstrse(void, bmech1, bmech2, bmech3)\n  print *, result\n  \n  !case4\n  void = 1.5\n  bmech1 = 2.0\n  bmech2 = 1.0\n  bmech3 = 0.5\n  result = fdstrse(void, bmech1, bmech2, bmech3)\n  print *, result\n  \n  !case5\n  void = 0.8\n  bmech1 = 0.0\n  bmech2 = 1.5\n  bmech3 = 0.8\n  result = fdstrse(void, bmech1, bmech2, bmech3)\n  print *, result\nend program main",
+            "result": [
+                "0.549573779",
+                "-257.046143",
+                "1.19421887",
+                "1.47151780",
+                "-437.709290"
+            ]
+        },
+        "code": "function fdstrse(void,bmech1,bmech2,bmech3)\n\n  ! **  fdstrse is compression length scale\n  !        stress with respect to void ratio\n  !\n\n  implicit none\n\n  real :: fdstrse,void,bmech1,bmech2,bmech3,tmp,fstrsel,dfstrsel\n\n  if( bmech1 > 0.0 )then\n    tmp=-(void-bmech2)/bmech3\n    tmp=-(void-bmech2)/bmech3\n    fdstrse=(bmech1/bmech3)*exp(tmp)\n  else\n    fstrsel=-0.0147351*(void**3)+0.311854*(void**2)-2.96371*void+7.34698\n    dfstrsel=-0.0442053*(void**2)+0.623708*void-2.96371\n    fdstrse=dfstrsel*exp(fstrsel)\n  end if\n\nend function\n"
+    },
+    {
+        "instruction": "Provide a Fortran function named \"cosd\" that calculates the cosine of an input angle given in degrees. The function takes one input argument of type real, representing the angle in degrees. The output is also of type real.",
+        "test_case": {
+            "unit_test": "program main\n  use test_function\n  implicit none\n  real :: x\n  \n  !case1\n  x = 0.0\n  print *, cosd(x)\n\n  !case2\n  x = 45.0\n  print *, cosd(x)\n\n  !case3\n  x = 90.0\n  print *, cosd(x)\n\n  !case4\n  x = 180.0\n  print *, cosd(x)\n\n  !case5\n  x = 270.0\n  print *, cosd(x)\nend program main",
+            "result": [
+                "1.00000000",
+                "0.707106769",
+                "-4.37113883E-08",
+                "-1.00000000",
+                "1.19248806E-08"
+            ]
+        },
+        "code": "      function cosd(x)\n          implicit none\n          real :: cosd, umr\n          real, intent(in) :: x\n          umr  = atan(1.0)*4./180. \n          cosd = cos(x*umr)\n\n      end function cosd\n"
+    },
+    {
+        "instruction": "Write a Fortran function named sind that calculates the sine of an angle given in degrees. The function takes one input argument of type real, representing the angle in degrees. The function returns one output argument of type real, representing the sine of the angle.",
+        "test_case": {
+            "unit_test": "program main\n  use test_function\n  implicit none\n  real :: x\n  \n  !case1\n  x = 0.0\n  print *, sind(x)\n\n  !case2\n  x = 45.0\n  print *, sind(x)\n\n  !case3\n  x = 90.0\n  print *, sind(x)\n\n  !case4\n  x = 180.0\n  print *, sind(x)\n\n  !case5\n  x = -30.0\n  print *, sind(x)\n\nend program main",
+            "result": [
+                "0.00000000",
+                "0.707106769",
+                "1.00000000",
+                "-8.74227766E-08",
+                "-0.500000000"
+            ]
+        },
+        "code": "      function sind(x)\n          implicit none\n          real :: sind, umr\n          real, intent(in) :: x\n          umr  = atan(1.0)*4./180. \n          sind = sin(x*umr)\n\n      end function sind\n"
+    },
+    {
+        "instruction": "Provide a Fortran function code named erfc_salmon_mid that calculates the complementary error function (erfc) using the Salmon algorithm. The function takes a single input argument of type real(8) and returns a value of the same type. The input argument should be in the range 0.46875d0 < x < 4d0. The function uses pre-defined arrays p and q of length 8 to perform the calculations. The output value is obtained by evaluating a polynomial expression using the input argument x and the coefficients from the p and q arrays. The final result is multiplied by the exponential of the square of x.",
+        "test_case": {
+            "unit_test": "program main\n  use test_function\n  implicit none\n  real(8) :: x\n  real(8) :: result\n  \n  !case1\n  x = 0.5\n  result = erfc_salmon_mid(x)\n  print *, result\n  \n  !case2\n  x = 1.5\n  result = erfc_salmon_mid(x)\n  print *, result\n  \n  !case3\n  x = 2.5\n  result = erfc_salmon_mid(x)\n  print *, result\n  \n  !case4\n  x = 3.5\n  result = erfc_salmon_mid(x)\n  print *, result\n  \n  !case5\n  x = 4.0\n  result = erfc_salmon_mid(x)\n  print *, result\n  \nend program main",
+            "result": [
+                "0.47950012218695348",
+                "3.3894853524689267E-002",
+                "4.0695201744495897E-004",
+                "7.4309837234141267E-007",
+                "1.5417257900280017E-008"
+            ]
+        },
+        "code": "  function erfc_salmon_mid(x) result(y) ! 0.46875d0 <x< 4d0\n    implicit none\n    real(8),intent(in) :: x\n    real(8) :: y\n    real(8) :: x2\n    real(8),parameter :: &\n       p(0:7) = (/  &\n       & 3.004592610201616005d2, &\n       & 4.519189537118729422d2, &\n       & 3.393208167343436870d2, &\n       & 1.529892850469404039d2, &\n       & 4.316222722205673530d1, &\n       & 7.211758250883093659d0, &\n       & 5.641955174789739711d-1, &\n       &-1.368648573827167067d-7 & \n       &/), &\n       q(0:7) = (/ &\n       & 3.004592609569832933d2, &\n       & 7.909509253278980272d2, &\n       & 9.313540948506096211d2, &\n       & 6.389802644656311665d2, &\n       & 2.775854447439876434d2, &\n       & 7.700015293522947295d1, &\n       & 1.278272731962942351d1, &\n       & 1d0 &\n       &/)\n\n    x2 = x**2\n\n    y = (p(0) + p(1)*x + p(2)*x**2 + p(3)*x**3 + p(4)*x**4 & \n         + p(5)*x**5 + p(6)*x**6 + p(7)*x**7)/ &\n         (q(0) + q(1)*x + q(2)*x**2 + q(3)*x**3 + q(4)*x**4 & \n         + q(5)*x**5 + q(6)*x**6 + q(7)*x**7)\n    y = exp(-x2)*y\n\n\n  end function erfc_salmon_mid\n"
+    },
+    {
+        "instruction": "Give me a Fortran function code named reversible to determine if an integer is palindromic in its digits. The function takes in one input argument of type integer. The output of the function is a logical value indicating whether the integer is palindromic or not.",
+        "test_case": {
+            "unit_test": "program main\n  use test_function\n  implicit none\n  integer :: num\n\n  !case1\n  num = 12321\n  print *, reversible(num)\n\n  !case2\n  num = 12345\n  print *, reversible(num)\n\n  !case3\n  num = 123321\n  print *, reversible(num)\n\n  !case4\n  num = 123456\n  print *, reversible(num)\n\n  !case5\n  num = 987789\n  print *, reversible(num)\n\nend program main",
+            "result": [
+                "F",
+                "F",
+                "T",
+                "F",
+                "T"
+            ]
+        },
+        "code": "function reversible(num)\n  ! determine if an integer is palindromic in its digits\n\n  implicit none\n\n  logical :: reversible\n  integer, intent(in) :: num\n  integer :: len,itr\n  ! 999*999 is 998001, so only 6 characters are needed\n  character(len=6) :: str,rev\n  ! print to the string\n  write (str,\"(i6)\") num\n  len=len_trim(str)\n  ! flip the string and save to rev\n  do itr=1,len\n    rev(itr:itr)=str(len+1-itr:len+1-itr)\n  end do\n\n  reversible=str(1:len).eq.rev(1:len)\n\nend function reversible\n"
+    },
+    {
+        "instruction": "Create a Fortran function named parsecompvector that takes a character string compvector as input and returns an integer nc as output. The function calculates the number of components in the compvector string by counting the occurrences of a delimiter (',') or a space (' ') between the components. The number of input arguments is 1 and the data type is character(len=*). The number of output arguments is 1 and the data type is integer.",
+        "test_case": {
+            "unit_test": "program main\n  use test_function\n  implicit none\n  character(len=100) :: compvector\n  \n  !case1\n  compvector = '1,2,3,4,5'\n  print *, parsecompvector(compvector)\n  \n  !case2\n  compvector = 'a b c d e'\n  print *, parsecompvector(compvector)\n  \n  !case3\n  compvector = '1, 2, 3, 4, 5'\n  print *, parsecompvector(compvector)\n  \n  !case4\n  compvector = 'one,two,three,four,five'\n  print *, parsecompvector(compvector)\n  \n  !case5\n  compvector = '1,2,3   ,4,5'\n  print *, parsecompvector(compvector)\n  \nend program main",
+            "result": [
+                "95",
+                "95",
+                "95",
+                "81",
+                "95"
+            ]
+        },
+        "code": "  function parsecompvector(compvector) result(nc)\n    character(len=*), intent(in) :: compvector\n    integer :: nc\n    ! locals\n    character(len=1), parameter :: delim = ','\n    character(len=1), parameter :: space = ' '\n    integer :: strlen, i, lasti\n    strlen = len(compvector)\n    nc = 0\n    lasti = 0\n    do i=2,strlen\n      if (compvector(i:i) == delim .or. compvector(i:i)== space) then\n        if (i > lasti) then\n          nc = nc + 1\n        endif\n        lasti = i\n      endif\n    enddo\n    if (strlen > lasti) then\n      nc = nc + 1\n    endif\n  end function parsecompvector\n"
+    },
+    {
+        "instruction": "Write a Fortran function called \"period\" that calculates the period of a simple pendulum based on its length. The function takes one input parameter, \"l\", which is a real number representing the length of the pendulum. The function returns one output parameter, \"period\", also a real number, which represents the period of the pendulum. The formula used to calculate the period is: period = 2 * pi * sqrt(l / g), where pi is a constant representing the value of pi (approximately 3.1415926535) and g is a constant representing the acceleration due to gravity (approximately 9.80665).",
+        "test_case": {
+            "unit_test": "program main\n  use test_function\n  implicit none\n  real :: l\n\n  !case1\n  l = 10.0\n  print *, period(l)\n\n  !case2\n  l = 5.0\n  print *, period(l)\n\n  !case3\n  l = 2.5\n  print *, period(l)\n\n  !case4\n  l = 15.0\n  print *, period(l)\n\n  !case5\n  l = 7.8\n  print *, period(l)\n  \nend program main",
+            "result": [
+                "6.34482336",
+                "4.48646736",
+                "3.17241168",
+                "7.77078962",
+                "5.60359621"
+            ]
+        },
+        "code": "function period(l)\n    implicit none\n    real :: l\n    real :: period\n    real, parameter :: pi = 3.1415926535\n    real, parameter :: g = 9.80665\n    period = 2 * pi * (l / g) ** 0.5\n    return\nend function\n"
+    },
+    {
+        "instruction": "Provide a Fortran function named temps that calculates the temperature stress factor based on the given input parameters. The function has 4 input parameters of type real: bwtdmx (daily maximum air temperature), bwtdmn (daily minimum air temperature), bctopt (optimum crop growth temperature), and bctmin (minimum crop growth temperature). The function has one output parameter of type real: temps. \n\nTo compute the temperature stress factor, the function performs the following steps:\n1. Calculates the average of the maximum and minimum air temperatures and assigns it to the local variable dst0.\n2. Calculates the difference between dst0 and bctmin and assigns it to the local variable tgx. If tgx is less than or equal to 0, tgx is set to 0.\n3. Calculates the difference between bctopt and bctmin and assigns it to the local variable x1.\n4. Divides tgx by x1 and assigns the result to the local variable rto.\n5. Computes the sine of 1.5707 times rto and assigns it to temps.\n6. If rto is greater than 2, temps is set to 0.\n7. Computes temps raised to the power of 0.25 and assigns it back to temps.\n\nThe function temps calculates the temperature stress factor based on the provided input parameters and returns the result in the output parameter temps.",
+        "test_case": {
+            "unit_test": "program main\n  use test_function\n  implicit none\n  real :: bwtdmx, bwtdmn, bctopt, bctmin\n  \n  !case1\n  bwtdmx = 30.0\n  bwtdmn = 20.0\n  bctopt = 25.0\n  bctmin = 10.0\n  print *, temps(bwtdmx, bwtdmn, bctopt, bctmin)\n  \n  !case2\n  bwtdmx = 35.0\n  bwtdmn = 25.0\n  bctopt = 30.0\n  bctmin = 20.0\n  print *, temps(bwtdmx, bwtdmn, bctopt, bctmin)\n  \n  !case3\n  bwtdmx = 40.0\n  bwtdmn = 30.0\n  bctopt = 35.0\n  bctmin = 25.0\n  print *, temps(bwtdmx, bwtdmn, bctopt, bctmin)\n  \n  !case4\n  bwtdmx = 25.0\n  bwtdmn = 15.0\n  bctopt = 20.0\n  bctmin = 10.0\n  print *, temps(bwtdmx, bwtdmn, bctopt, bctmin)\n  \n  !case5\n  bwtdmx = 30.0\n  bwtdmn = 20.0\n  bctopt = 35.0\n  bctmin = 25.0\n  print *, temps(bwtdmx, bwtdmn, bctopt, bctmin)\n  \nend program main",
+            "result": [
+                "1.00000000",
+                "1.00000000",
+                "1.00000000",
+                "1.00000000",
+                "0.00000000"
+            ]
+        },
+        "code": "function temps(bwtdmx,bwtdmn,bctopt,bctmin)\n!\nimplicit none\n!\n\n!\nreal :: bctmin,bctopt,bwtdmn,bwtdmx\nreal :: temps\n!\n! local variables\n!\nreal :: dst0,rto,tgx,x1\n!\n!     author : amare retta\n!     + + + purpose + + +\n!     to calculate the temperature stress factor\n!     this algorithms was taken from the epic subroutine cgrow.\n \n!     + + + kewords + + +\n!     temperature stress\n \n!     + + + argument declarations + + +\n \n!     + + + argument definitions + + +\n!     bwtdmx - daily maximum air temperature\n!     bwtdmn - daily minimum air temperature\n!     bctopt - optimum crop growth temperature\n!     bctmin - minimum crop growth temperature\n\n!             stress factor\n \n!     + + + local variables + + +\n \n!     + + + local variable definitions + + +\n!     dst0 - average of max and min air temperatures\n!     rto - interim variable\n!     tgx - difference between the soil surface temperature and the minimum\n!           temperature for plant growth\n!     x1 - difference between the optimum and minimum temperatures for plant\n!          growth\n \n!     + + + end of specifications + + +\n\n!     calculate temperature stress factor\n!     following one statement to be removed when soil temperature is available\ndst0 = (bwtdmx+bwtdmn)/2.0\ntgx = dst0 - bctmin\nif (tgx.le.0.) tgx = 0.\nx1 = bctopt - bctmin\nrto = tgx/x1\ntemps = sin(1.5707*rto)\nif (rto.gt.2.) temps = 0.\n \n      ! this reduces temperature stress around the optimum\ntemps = temps**0.25\n!    print *, 'in temps, temps = ', temps\n!    \nend function temps\n"
+    },
+    {
+        "instruction": "Provide a Fortran function code named \"associated_laguerre\" to calculate the associated Laguerre polynomial value for a given degree and parameters. The function takes three input arguments: an integer \"n\" representing the degree of the polynomial, and two real numbers \"alpha\" and \"x\" representing the parameters. The function returns a real number \"associated_laguerre\" which represents the value of the associated Laguerre polynomial.",
+        "test_case": {
+            "unit_test": "program main\n  use test_function\n  implicit none\n  integer :: n\n  real :: x, alpha\n\n  !case1\n  n = 0\n  x = 1.0\n  alpha = 2.0\n  print *, associated_laguerre(n, alpha, x)\n  \n  !case2\n  n = 1\n  x = 0.5\n  alpha = -1.0\n  print *, associated_laguerre(n, alpha, x)\n  \n  !case3\n  n = 3\n  x = 2.0\n  alpha = 0.0\n  print *, associated_laguerre(n, alpha, x)\n  \n  !case4\n  n = 4\n  x = 0.0\n  alpha = 1.5\n  print *, associated_laguerre(n, alpha, x)\n  \n  !case5\n  n = 2\n  x = -1.0\n  alpha = 3.0\n  print *, associated_laguerre(n, alpha, x)\n  \nend program main",
+            "result": [
+                "1.00000000",
+                "-0.500000000",
+                "-0.333333343",
+                "9.02343750",
+                "15.5000000"
+            ]
+        },
+        "code": "   elemental function associated_laguerre(n, alpha, x)\n\n      integer, intent(in) :: n\n      real, intent(in) :: x\n      real, intent(in) :: alpha\n      integer :: k\n      real :: associated_laguerre, p, p1, p2\n\n      p1 = dble(1.0)\n      p2 = dble(1.0) + alpha - x\n\n      if (n == 0) then\n         associated_laguerre = p1\n         return\n      else if (n == 1) then\n         associated_laguerre = p2\n         return\n      end if\n\n      do k = 2, n\n         p = ((dble(2.0) * k - dble(1.0) + alpha - x) * p2 - (k - dble(1.0) + alpha) * p1) / k\n         p1 = p2\n         p2 = p\n      end do\n\n      associated_laguerre = p\n\n   end function associated_laguerre\n"
+    },
+    {
+        "instruction": "Write a Fortran function named bin that calculates the binomial coefficient, which is the number of ways to choose k items from a set of n items. The function takes two integer arguments n and k as input. The function returns a single integer value c as output. The function should be defined as pure, meaning it does not have any side effects and only depends on its input arguments.",
+        "test_case": {
+            "unit_test": "program main\n  use test_function\n  implicit none\n  integer(kind=4) :: n, k, result\n  \n  !case1\n  n = 5\n  k = 2\n  result = bin(n, k)\n  print *, result\n  \n  !case2\n  n = 7\n  k = 3\n  result = bin(n, k)\n  print *, result\n  \n  !case3\n  n = 10\n  k = 5\n  result = bin(n, k)\n  print *, result\n  \n  !case4\n  n = 0\n  k = 0\n  result = bin(n, k)\n  print *, result\n  \n  !case5\n  n = 8\n  k = 8\n  result = bin(n, k)\n  print *, result\n  \nend program main",
+            "result": [
+                "10",
+                "35",
+                "252",
+                "1",
+                "1"
+            ]
+        },
+        "code": "  pure function bin(n,k) result (c)\n    implicit none\n    integer(kind=4), intent(in) :: n, k\n    integer(kind=4) :: i, c\n    c = 1\n    do i = 0, min(k,n-k) - 1\n       c = c * (n - i)\n       c = c / (i + 1)\n    end do\n  end function bin\n"
+    },
+    {
+        "instruction": "Provide a Fortran function named wagnerpruss_ice to calculate the vapor pressure of ice at a given temperature. The function takes one input argument of type real, representing the temperature in Kelvin. The output of the function is also of type real, representing the vapor pressure in Pa.",
+        "test_case": {
+            "unit_test": "program main\n  use test_function\n  implicit none\n  real :: t\n\n  !case1\n  t = 273.16\n  print *, wagnerpruss_ice(t)\n\n  !case2\n  t = 300.0\n  print *, wagnerpruss_ice(t)\n\n  !case3\n  t = 250.0\n  print *, wagnerpruss_ice(t)\n\n  !case4\n  t = 280.0\n  print *, wagnerpruss_ice(t)\n\n  !case5\n  t = 260.0\n  print *, wagnerpruss_ice(t)\n\nend program main",
+            "result": [
+                "3.28616608E+26",
+                "1.28170265E+26",
+                "9.81221424E+26",
+                "2.51012225E+26",
+                "5.89469654E+26"
+            ]
+        },
+        "code": "function wagnerpruss_ice(t)\n\nimplicit none\nreal, intent(in) :: t\nreal :: wagnerpruss_ice\n\nreal, parameter :: tt = 273.16 ! triple point temperature of water [k]\n\nwagnerpruss_ice = 611.657 * exp( &\n  (tt/t) * ( &\n    + 21.2144006 * (t/tt)**0.00333333333 &\n    + 27.3203819 * (t/tt)**1.20666667 &\n    +  6.1059813 * (t/tt)**1.70333333 &\n  ))\n\nend function wagnerpruss_ice\n"
+    },
+    {
+        "instruction": "Provide a Fortran function code named huang_ice to calculate the ice thickness in meters based on the temperature in Kelvin. The function takes one input parameter of type real representing the temperature in Kelvin. The function returns one output parameter of type real representing the ice thickness in meters.",
+        "test_case": {
+            "unit_test": "program main\n  use test_function\n  implicit none\n  real :: t\n  \n  !case1\n  t = 300.0\n  print *, huang_ice(t)\n\n  !case2\n  t = 273.15\n  print *, huang_ice(t)\n\n  !case3\n  t = 250.0\n  print *, huang_ice(t)\n\n  !case4\n  t = 400.0\n  print *, huang_ice(t)\n\n  !case5\n  t = 200.0\n  print *, huang_ice(t)\nend program main",
+            "result": [
+                "4575.58057",
+                "611.290710",
+                "76.0027542",
+                "744418.438",
+                "0.162607104"
+            ]
+        },
+        "code": "function huang_ice(t)\n\nimplicit none\nreal, intent(in) :: t\nreal  :: huang_ice\n\nreal :: tc\n\ntc = t - 273.15  !  tc [degc]\n\nhuang_ice = exp(43.494 -  6545.8 / (tc + 278)) / (tc + 868)**2\n\nend function huang_ice\n"
+    },
+    {
+        "instruction": "Provide a Fortran function code named sattab_l that calculates the saturation vapor pressure over liquid water using the Magnus-Tetens equation. The input parameter is an integer named \"m\". The output parameter is a real number named \"sattab_l\".",
+        "test_case": {
+            "unit_test": "program main\n  use test_function\n  implicit none\n  integer :: m\n  \n  !case1\n  m = 100\n  print *, sattab_l(m)\n\n  !case2\n  m = 200\n  print *, sattab_l(m)\n\n  !case3\n  m = 300\n  print *, sattab_l(m)\n\n  !case4\n  m = 400\n  print *, sattab_l(m)\n\n  !case5\n  m = 500\n  print *, sattab_l(m)\nend program main",
+            "result": [
+                "1.61955808E-03",
+                "6.36584684E-02",
+                "1.23353982",
+                "13.5541019",
+                "95.3010788"
+            ]
+        },
+        "code": "function sattab_l(m)\n  implicit none\n  integer, intent(in) :: m\n  real :: sattab_l, t\n  \n  t = 150.+0.2*m\n  sattab_l = exp(54.842763-6763.22/t-4.21*log(t)+0.000367*t+&\n       tanh(0.0415*(t-218.8))*(53.878-1331.22/t-9.44523*log(t)+ 0.014025*t))\nend function sattab_l\n"
+    },
+    {
+        "instruction": "Write a Fortran function named userfunc that calculates the sine of the sum of two double precision floating point numbers. The function takes two input arguments of type real(8) and returns a single output argument of type real(8). The name of the function is userfunc.",
+        "test_case": {
+            "unit_test": "program main\n  use test_function\n  implicit none\n  real(8) :: x, y, result\n  \n  !case1\n  x = 0.0\n  y = 0.0\n  result = userfunc(x, y)\n  print *, result\n  \n  !case2\n  x = 1.0\n  y = 1.0\n  result = userfunc(x, y)\n  print *, result\n  \n  !case3\n  x = 2.5\n  y = -1.5\n  result = userfunc(x, y)\n  print *, result\n  \n  !case4\n  x = 3.14159\n  y = 0.0\n  result = userfunc(x, y)\n  print *, result\n  \n  !case5\n  x = -2.0\n  y = 2.0\n  result = userfunc(x, y)\n  print *, result\n  \nend program main",
+            "result": [
+                "0.0000000000000000",
+                "0.90929742682568171",
+                "0.84147098480789650",
+                "2.5351815901107468E-006",
+                "0.0000000000000000"
+            ]
+        },
+        "code": "function userfunc(x, y) result(func)\n\n  implicit none\n\n  real(8) :: x, y, func\n\n  func = sin(x + y)\n\nend function userfunc\n"
+    },
+    {
+        "instruction": "Create a Fortran function named prefix that checks if one string is a prefix of another string. The function takes two input arguments, both of type character(len=*). The output argument is of type logical. The function compares the first string to the specified prefix of the second string, character by character. If the first string is a prefix of the second string, the function returns true (.true.). Otherwise, it returns false (.false.).",
+        "test_case": {
+            "unit_test": "program main\n  use test_function\n  implicit none\n  character(len=:), allocatable :: pre, str\n\n  !case1\n  pre = 'abc'\n  str = 'abcdef'\n  print *, prefix(pre, str)\n\n  !case2\n  pre = 'abc'\n  str = 'ab'\n  print *, prefix(pre, str)\n\n  !case3\n  pre = 'abc'\n  str = 'abc'\n  print *, prefix(pre, str)\n\n  !case4\n  pre = 'abc'\n  str = 'abca'\n  print *, prefix(pre, str)\n\n  !case5\n  pre = 'def'\n  str = 'abcdef'\n  print *, prefix(pre, str)\nend program main",
+            "result": [
+                "T",
+                "F",
+                "T",
+                "T",
+                "F"
+            ]
+        },
+        "code": "function prefix(pre, str) result(out)\n\tcharacter(len=*), intent(in) :: pre\n\tcharacter(len=*), intent(in) :: str\n\tlogical :: out\n\n\tinteger :: length\n\tinteger :: i\n\n\tlength = len(pre)\n\tout = .true.\n\n\tif (length > len(str)) then\n\t\tout = .false.\n\t\treturn\n\tend if\n\n\tdo i = 1, length\n\t\tif (pre(i:i) /= str(i:i)) then\n\t\t\tout = .false.\n\t\t\texit\n\t\tend if\n\tend do\nend function prefix\n"
+    },
+    {
+        "instruction": "Give me a Fortran function code named isprime to determine whether a given number is prime or not.The number of input arguments is 1 and the test_data type is [integer].The number of output arguments is 1 and the test_data type is [logical].",
+        "test_case": {
+            "unit_test": "program main\n  use test_function\n  implicit none\n  integer(kind=8) :: s\n  \n  !case1\n  s = 7\n  print *, isprime(s)\n\n  !case2\n  s = 15\n  print *, isprime(s)\n\n  !case3\n  s = 97\n  print *, isprime(s)\n\n  !case4\n  s = 100\n  print *, isprime(s)\n\n  !case5\n  s = 541\n  print *, isprime(s)\nend program main",
+            "result": [
+                "T",
+                "F",
+                "T",
+                "F",
+                "T"
+            ]
+        },
+        "code": "        function isprime (s)\n                logical :: isprime\n                integer (kind=8) :: s, i, top\n\n                isprime = .false.  \n\n                if(s <= 1) then\n                        return\n                end if\n\n                top = int(sqrt(real(s))) + 1\n\n                do i = 2, top + 1, 1\n\n                        if (i == top) then\n                                isprime = .true.\n                                exit\n                        end if\n\n                        if(mod(s, i) == 0) then\n                                exit\n                        end if\n\n                end do\n\n                return\n\n        end function isprime\n"
+    },
+    {
+        "instruction": "Write a Fortran function named bump_function that computes the value of a bump function for a given input value.The function takes one input argument of type real and returns one output argument of type real.The bump function is defined as follows: if the absolute value of the input value is less than 1, the function computes the value using the formula exp(-1/(1-(x**2))), otherwise it returns 0.",
+        "test_case": {
+            "unit_test": "program main\n  use test_function\n  implicit none\n  real :: x, y\n  \n  !case1\n  x = 0.5\n  y = bump_function(x)\n  print *, y\n  \n  !case2\n  x = -0.8\n  y = bump_function(x)\n  print *, y\n  \n  !case3\n  x = 1.2\n  y = bump_function(x)\n  print *, y\n  \n  !case4\n  x = 0.0\n  y = bump_function(x)\n  print *, y\n  \n  !case5\n  x = -2.5\n  y = bump_function(x)\n  print *, y\nend program main",
+            "result": [
+                "0.263597131",
+                "6.21764995E-02",
+                "0.00000000",
+                "0.367879450",
+                "0.00000000"
+            ]
+        },
+        "code": "function bump_function(x) result(y)\n    real :: x, y\n    if (abs(x) < 1) then\n        y = exp(-1/(1-(x**2)))\n    else\n        y = 0\n    end if\nend function bump_function\n"
+    },
+    {
+        "instruction": "Write a Fortran function code named dirac_delta to compute the Dirac delta function value at a given point. The function takes two input arguments: n and x, both of type real. The function returns a single output value, y, of type real. \n\nTo compute the Dirac delta function, if the absolute value of x is greater than 1/(2*n), the output value y is set to 0. Otherwise, the output value y is set to the input value n.",
+        "test_case": {
+            "unit_test": "program main\n  use test_function\n  implicit none\n  real :: n, x\n  \n  !case1\n  n = 1.0\n  x = 0.0\n  print *, dirac_delta(n, x)\n\n  !case2\n  n = 2.0\n  x = 0.5\n  print *, dirac_delta(n, x)\n\n  !case3\n  n = -3.0\n  x = -0.2\n  print *, dirac_delta(n, x)\n\n  !case4\n  n = 0.0\n  x = 1.0\n  print *, dirac_delta(n, x)\n\n  !case5\n  n = 10.0\n  x = 0.001\n  print *, dirac_delta(n, x)\nend program main",
+            "result": [
+                "1.00000000",
+                "2.00000000",
+                "0.00000000",
+                "0.00000000",
+                "10.0000000"
+            ]
+        },
+        "code": "function dirac_delta(n, x) result(y)\n    real :: x, y, n\n    if (abs(x) > 1/(2*x)) then\n        y = 0\n    else\n        y = n \n    end if\nend function dirac_delta\n"
+    },
+    {
+        "instruction": "Create a Fortran function named \"calc_angle\" that calculates the angle between three points in three-dimensional space. The function takes three 3-dimensional arrays of type double precision as input parameters: \"a\", \"b\", and \"c\". The function returns a single double precision value as the output parameter \"angle\".",
+        "test_case": {
+            "unit_test": "program main\n  use test_function\n  implicit none\n  double precision, dimension(3) :: a, b, c\n\n  !case1\n  a = [0.0d0, 0.0d0, 0.0d0]\n  b = [1.0d0, 0.0d0, 0.0d0]\n  c = [0.0d0, 1.0d0, 0.0d0]\n  print *, calc_angle(a, b, c)\n\n  !case2\n  a = [0.0d0, 0.0d0, 0.0d0]\n  b = [1.0d0, 0.0d0, 0.0d0]\n  c = [0.0d0, 0.0d0, 1.0d0]\n  print *, calc_angle(a, b, c)\n\n  !case3\n  a = [1.0d0, 1.0d0, 1.0d0]\n  b = [2.0d0, 2.0d0, 2.0d0]\n  c = [3.0d0, 3.0d0, 3.0d0]\n  print *, calc_angle(a, b, c)\n\n  !case4\n  a = [0.0d0, 0.0d0, 0.0d0]\n  b = [1.0d0, 1.0d0, 0.0d0]\n  c = [0.0d0, 1.0d0, 0.0d0]\n  print *, calc_angle(a, b, c)\n\n  !case5\n  a = [1.0d0, 2.0d0, 3.0d0]\n  b = [4.0d0, 5.0d0, 6.0d0]\n  c = [7.0d0, 8.0d0, 9.0d0]\n  print *, calc_angle(a, b, c)\n\nend program main",
+            "result": [
+                "0.78539816339744839",
+                "0.78539816339744839",
+                "3.1415926535897931",
+                "0.78539816339744839",
+                "3.1415926535897931"
+            ]
+        },
+        "code": "function calc_angle(a, b, c) result(angle)\n\n    implicit none\n\n    double precision, intent(in), dimension(3) :: a\n    double precision, intent(in), dimension(3) :: b\n    double precision, intent(in), dimension(3) :: c\n\n    double precision, dimension(3) :: v1\n    double precision, dimension(3) :: v2\n\n    double precision :: cos_angle\n    double precision :: angle\n\n    v1 = a - b\n    v2 = c - b\n\n    v1 = v1 / norm2(v1)\n    v2 = v2 / norm2(v2)\n\n    cos_angle = dot_product(v1,v2)\n\n    ! clipping\n    if (cos_angle > 1.0d0) cos_angle = 1.0d0\n    if (cos_angle < -1.0d0) cos_angle = -1.0d0\n\n    angle = acos(cos_angle)\n\nend function calc_angle\n"
+    },
+    {
+        "instruction": "Create a Fortran function named frequency that calculates the resonant frequency of an RLC circuit. The function takes three input arguments: r (resistance), l (inductance), and c (capacitance), all of which are of type real. The function does not have any output parameters. The resonant frequency is calculated using the formula: frequency = 1.0 / (2 * pi * (l * c) ** 0.5).",
+        "test_case": {
+            "unit_test": "program main\n  use test_function\n  implicit none\n  real :: r, l, c\n  \n  !case1\n  r = 1.0\n  l = 0.5\n  c = 0.2\n  print *, frequency(r, l, c)\n\n  !case2\n  r = 2.0\n  l = 1.0\n  c = 0.1\n  print *, frequency(r, l, c)\n\n  !case3\n  r = 0.1\n  l = 0.01\n  c = 0.001\n  print *, frequency(r, l, c)\n\n  !case4\n  r = 10.0\n  l = 5.0\n  c = 0.5\n  print *, frequency(r, l, c)\n\n  !case5\n  r = 0.001\n  l = 0.0001\n  c = 0.00001\n  print *, frequency(r, l, c)\nend program main",
+            "result": [
+                "0.503292084",
+                "0.503292084",
+                "50.3292084",
+                "0.100658424",
+                "5032.92090"
+            ]
+        },
+        "code": "function frequency(r, l, c)\n    implicit none\n    real, parameter :: pi = 3.1415926535\n    real :: r\n    real :: l\n    real :: c\n    real :: frequency\n    frequency = 1.0 / (2 * pi * (l * c) ** 0.5)\n    return\nend function\n"
+    },
+    {
+        "instruction": "Write a Fortran function named distance that calculates the Euclidean distance between two points in three-dimensional space. The function takes in two arrays of real numbers, c1 and c2, each with three elements representing the coordinates of the points. The function returns a single real number, the distance between the two points.",
+        "test_case": {
+            "unit_test": "program main\n  use test_function\n  implicit none\n  real, dimension(3) :: c1, c2\n\n  !case1\n  c1 = [0.0, 0.0, 0.0]\n  c2 = [1.0, 1.0, 1.0]\n  print *, distance(c1, c2)\n\n  !case2\n  c1 = [-2.0, 3.0, 4.0]\n  c2 = [1.5, -2.5, 6.0]\n  print *, distance(c1, c2)\n\n  !case3\n  c1 = [1.0, 2.0, 3.0]\n  c2 = [1.0, 2.0, 3.0]\n  print *, distance(c1, c2)\n\n  !case4\n  c1 = [0.0, 0.0, 0.0]\n  c2 = [0.0, 0.0, 0.0]\n  print *, distance(c1, c2)\n\n  !case5\n  c1 = [-1.0, -1.0, -1.0]\n  c2 = [1.0, 1.0, 1.0]\n  print *, distance(c1, c2)\nend program main",
+            "result": [
+                "1.73205078",
+                "6.81909084",
+                "0.00000000",
+                "0.00000000",
+                "3.46410155"
+            ]
+        },
+        "code": "function distance(c1,c2)\n  real :: distance\n  real, dimension(3) :: c1, c2\n  \n  distance = sqrt(sum((c1-c2)**2))\n  return\nend function distance\n"
+    },
+    {
+        "instruction": "Give me a Fortran function code named greatest_common_factor to calculate the greatest common factor of two integers. The number of input arguments is 2 and the data type is integer. The number of output arguments is 1 and the data type is integer.",
+        "test_case": {
+            "unit_test": "program main\n  use test_function\n  implicit none\n  integer :: a, b, c\n\n  !case1\n  a = 15\n  b = 25\n  c = greatest_common_factor(a, b)\n  print *, c\n\n  !case2\n  a = 21\n  b = 14\n  c = greatest_common_factor(a, b)\n  print *, c\n\n  !case3\n  a = 36\n  b = 48\n  c = greatest_common_factor(a, b)\n  print *, c\n\n  !case4\n  a = 55\n  b = 105\n  c = greatest_common_factor(a, b)\n  print *, c\n\n  !case5\n  a = 1024\n  b = 256\n  c = greatest_common_factor(a, b)\n  print *, c\n\nend program main",
+            "result": [
+                "5",
+                "7",
+                "12",
+                "5",
+                "256"
+            ]
+        },
+        "code": "    recursive function greatest_common_factor(a, b) result(c)\n      implicit none\n      integer :: c\n      integer, intent(in) :: a, b\n      if (a.eq.b) then\n         c = a\n      else if (a.gt.b) then\n         c = greatest_common_factor(a-b,b)\n      else\n         c = greatest_common_factor(a,b-a)\n      end if\n    end function greatest_common_factor\n"
+    },
+    {
+        "instruction": "Write a Fortran function named \"det\" that calculates the determinant of a 2x2 matrix. The function takes four input arguments of type real(8) (double precision) named p1, p2, p3, and p4. The function returns a single output of type real(8) (double precision) named det, which represents the determinant of the matrix.",
+        "test_case": {
+            "unit_test": "program main\n  use test_function\n  implicit none\n  real(8) :: p1, p2, p3, p4\n  \n  !case1\n  p1 = 1.0\n  p2 = 2.0\n  p3 = 3.0\n  p4 = 4.0\n  print *, det(p1, p2, p3, p4)\n\n  !case2\n  p1 = -1.0\n  p2 = 0.0\n  p3 = 2.5\n  p4 = 3.7\n  print *, det(p1, p2, p3, p4)\n\n  !case3\n  p1 = 5.0\n  p2 = -3.5\n  p3 = 2.0\n  p4 = 1.0\n  print *, det(p1, p2, p3, p4)\n\n  !case4\n  p1 = 0.0\n  p2 = 0.0\n  p3 = 0.0\n  p4 = 0.0\n  print *, det(p1, p2, p3, p4)\n\n  !case5\n  p1 = -2.5\n  p2 = 1.2\n  p3 = -3.8\n  p4 = 0.0\n  print *, det(p1, p2, p3, p4)\nend program main",
+            "result": [
+                "-2.0000000000000000",
+                "-3.7000000476837158",
+                "12.000000000000000",
+                "0.0000000000000000",
+                "4.5600001239776589"
+            ]
+        },
+        "code": "   function det(p1, p2, p3, p4)\n      !!----------------------------------------------------------\n\n      !!\n      !!    ** purpose : compute determinant\n      !!\n      !! * history:\n      !!     j.m. molines may 2007\n      !!----------------------------------------------------------\n      implicit none\n      real(8),intent(in) :: p1, p2, p3, p4\n      real(8) :: det\n      det = p1*p4 - p2*p3\n   end function det\n"
+    },
+    {
+        "instruction": "Provide a Fortran function code named dpower to compute the value of x raised to the power of n, and then calculate the m-th order derivative of that value. The function takes three input parameters: x of type double precision real, n of type integer, and m of type integer. The function returns a value of type double precision real.",
+        "test_case": {
+            "unit_test": "program main\n  use test_function\n  implicit none\n  real(8) :: x\n  integer :: n, m\n  \n  !case1\n  x = 2.0\n  n = 3\n  m = 2\n  print *, dpower(x, n, m)\n\n  !case2\n  x = -1.5\n  n = 4\n  m = 1\n  print *, dpower(x, n, m)\n\n  !case3\n  x = 0.5\n  n = 5\n  m = 3\n  print *, dpower(x, n, m)\n\n  !case4\n  x = 10.0\n  n = 6\n  m = 6\n  print *, dpower(x, n, m)\n\n  !case5\n  x = 3.14\n  n = 2\n  m = 0\n  print *, dpower(x, n, m)\nend program main",
+            "result": [
+                "12.000000000000000",
+                "-13.500000000000000",
+                "15.000000000000000",
+                "720.00000000000000",
+                "9.8596006587982288"
+            ]
+        },
+        "code": "function dpower(x,n,m) bind(c)\n! \u5bf9x^n\u6c42m\u9636\u5bfc\u6570\u540e\u7684\u503c\n    real(8), intent(in) :: x\n    integer, intent(in) :: n, m\n    real(8) :: dpower\n\n    integer :: k, l\n\n    if ( m>n ) then\n        dpower = 0.d0\n        return\n    end if\n\n    k = n\n    l = m\n    dpower = x**(n-m)\n\n    do while ( l>0 )\n        dpower = dpower*k\n        l = l - 1\n        k = k - 1\n    end do\nend function dpower\n"
+    },
+    {
+        "instruction": "Create a Fortran function named doublefactorial that calculates the double factorial of a given integer. The function takes one input argument of type integer and returns one output argument of type integer. The function implements a recursive algorithm to compute the double factorial. If the input integer is less than zero, the function returns 0. Otherwise, the function uses a select case statement to compute the double factorial for specific input values, and for other values, it recursively calls itself to calculate the double factorial.",
+        "test_case": {
+            "unit_test": "program main\n  use test_function\n  implicit none\n  integer :: n, result\n  \n  !case1\n  n = 5\n  result = doublefactorial(n)\n  print *, result\n  \n  !case2\n  n = 8\n  result = doublefactorial(n)\n  print *, result\n  \n  !case3\n  n = 12\n  result = doublefactorial(n)\n  print *, result\n  \n  !case4\n  n = 15\n  result = doublefactorial(n)\n  print *, result\n  \n  !case5\n  n = 18\n  result = doublefactorial(n)\n  print *, result\nend program main",
+            "result": [
+                "15",
+                "384",
+                "46080",
+                "2027025",
+                "185794560"
+            ]
+        },
+        "code": "recursive function doublefactorial(n)  result(f)\n    integer, intent(in):: n\n    integer  (kind = 4) :: f\n    if (n<0) then\n      f=0\n      return\n    else\n      select case (n)\n        case (0)\n            f =  1\n        case (1)\n            f =  1\n        case (2)\n            f =  2\n        case (3)\n            f =  3\n        case (4)\n            f =  8\n        case (5)\n            f =  15\n        case (6)\n            f =  48\n        case (7)\n            f =  105\n        case (8)\n            f =  384\n        case (9)\n            f =  945\n        case (10)\n            f =  3840\n        case (11)\n            f =  10395\n        case (12)\n            f =  46080\n        case (13)\n            f =  135135\n        case (14)\n            f =  645120\n        case (15)\n            f =  2027025\n        case (16)\n            f =  10321920\n        case (17)\n            f =  34459425\n        case (18)\n            f =  185794560\n        case default\n            f =  n*doublefactorial(n-2)\n      end select\n    endif\nend function doublefactorial\n"
+    },
+    {
+        "instruction": "Write a Fortran function named qincom that calculates the incompressible speed based on the Karman-Tsien compressible speed. The function takes three input parameters: qc (real), qinf (real), and tklam (real). It returns a single output parameter qincom (real).",
+        "test_case": {
+            "unit_test": "program main\n  use test_function\n  implicit none\n  real :: qc, qinf, tklam\n  \n  !case1\n  qc = 0.5\n  qinf = 1.0\n  tklam = 0.2\n  print *, qincom(qc, qinf, tklam)\n  \n  !case2\n  qc = 1.0\n  qinf = 2.0\n  tklam = 0.1\n  print *, qincom(qc, qinf, tklam)\n  \n  !case3\n  qc = 10.0\n  qinf = 5.0\n  tklam = 0.5\n  print *, qincom(qc, qinf, tklam)\n  \n  !case4\n  qc = 0.1\n  qinf = 0.1\n  tklam = 0.0\n  print *, qincom(qc, qinf, tklam)\n  \n  !case5\n  qc = 2.5\n  qinf = 3.5\n  tklam = 0.3\n  print *, qincom(qc, qinf, tklam)\n  \nend program main",
+            "result": [
+                "0.582575798",
+                "1.07878447",
+                "5.93070316",
+                "0.100000001",
+                "2.85734105"
+            ]
+        },
+        "code": "    function qincom(qc, qinf, tklam)\n        implicit none\n        !\n        !*** start of declarations rewritten by spag\n        !\n        ! dummy arguments\n        !\n        real :: qc, qinf, tklam\n        real :: qincom\n        intent (in) qc, qinf, tklam\n        !\n        ! local variables\n        !\n        real :: tmp\n        !\n        !*** end of declarations rewritten by spag\n        !\n        !\n        !*** start of declarations rewritten by spag\n        !\n        ! dummy arguments\n        !\n        !\n        ! local variables\n        !\n        !\n        !*** end of declarations rewritten by spag\n        !\n        !-------------------------------------\n        !     sets incompressible speed from\n        !     karman-tsien compressible speed\n        !-------------------------------------\n        !\n        if (tklam<1.0e-4 .or. abs(qc)<1.0e-4) then\n            !----- for nearly incompressible case or very small speed, use asymptotic\n            !      expansion of singular quadratic formula to avoid numerical problems\n            qincom = qc / (1.0 - tklam)\n        else\n            !----- use quadratic formula for typical case\n            tmp = 0.5 * (1.0 - tklam) * qinf / (qc * tklam)\n            qincom = qinf * tmp * (sqrt(1.0 + 1.0 / (tklam * tmp**2)) - 1.0)\n        endif\n    end function qincom\n"
+    },
+    {
+        "instruction": "Create a Fortran function named vdot that calculates the dot product of two arrays of double precision floating-point numbers. The function takes two input arrays of type real(kind=8) and returns a single output value of the same type. The function should be defined as a pure function.",
+        "test_case": {
+            "unit_test": "program main\n  use test_function\n  implicit none\n  real(kind=8), allocatable :: x(:), y(:)\n  real(kind=8) :: z\n  \n  !case1\n  allocate(x(3))\n  allocate(y(3))\n  x = [1.0, 2.0, 3.0]\n  y = [4.0, 5.0, 6.0]\n  z = vdot(x, y)\n  print *, z\n  deallocate(x)\n  deallocate(y)\n  \n  !case2\n  allocate(x(5))\n  allocate(y(5))\n  x = [0.0, 0.0, 0.0, 0.0, 0.0]\n  y = [1.0, 2.0, 3.0, 4.0, 5.0]\n  z = vdot(x, y)\n  print *, z\n  deallocate(x)\n  deallocate(y)\n  \n  !case3\n  allocate(x(4))\n  allocate(y(4))\n  x = [1.0, -2.0, 3.0, -4.0]\n  y = [0.5, 0.5, 0.5, 0.5]\n  z = vdot(x, y)\n  print *, z\n  deallocate(x)\n  deallocate(y)\n  \n  !case4\n  allocate(x(2))\n  allocate(y(2))\n  x = [1.123456789, 2.987654321]\n  y = [9.87654321, 8.7654321]\n  z = vdot(x, y)\n  print *, z\n  deallocate(x)\n  deallocate(y)\n  \n  !case5\n  allocate(x(6))\n  allocate(y(6))\n  x = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6]\n  y = [1.0, 2.0, 3.0, 4.0, 5.0, 6.0]\n  z = vdot(x, y)\n  print *, z\n  deallocate(x)\n  deallocate(y)\n  \nend program main",
+            "result": [
+                "32.000000000000000",
+                "0.0000000000000000",
+                "-1.0000000000000000",
+                "37.283950676152699",
+                "9.1000002101063728"
+            ]
+        },
+        "code": "    pure function vdot(x,y) result(z)\r\n\r\n    real(kind=8)\t::  x(:), y(:), z\r\n    integer\t\t\t::  i\r\n\r\n    intent(in)      ::  x, y\r\n\r\n\tz = 0.d0\r\n    do i = 1, size(x)\r\n        z = z + x(i)*y(i)\r\n    end do\r\n\r\n    end function vdot\r\n"
+    },
+    {
+        "instruction": "Write a Fortran function named \"gammln\" that calculates the natural logarithm of the gamma function. The function takes a single input argument of type \"real\" and returns a value of type \"real\". The name of the function is \"gammln\".",
+        "test_case": {
+            "unit_test": "program main\n  use test_function\n  implicit none\n  double precision :: xx\n  \n  !case1\n  xx = 2.5\n  print *, gammln(xx)\n  \n  !case2\n  xx = 5.0\n  print *, gammln(xx)\n  \n  !case3\n  xx = 7.9\n  print *, gammln(xx)\n  \n  !case4\n  xx = 10.2\n  print *, gammln(xx)\n  \n  !case5\n  xx = 15.6\n  print *, gammln(xx)\n  \nend program main",
+            "result": [
+                "0.28468287047291829",
+                "3.1780538303479453",
+                "8.3242660589572264",
+                "13.254266310778187",
+                "26.808071523624573"
+            ]
+        },
+        "code": "function gammln(xx)\n\n!***   taken from the \"numerical recipes\"\n\n!--------------------------------------------------\nimplicit none\ndouble precision :: xx\ndouble precision :: gammln\ninteger :: j\ndouble precision :: ser,stp,tmp,x,y\ndouble precision, dimension(6) :: cof\nsave cof,stp\ndata cof,stp/76.18009172947146d0,-86.50532032941677d0,24.01409824083091d0,  &\n            -1.231739572450155d0,.1208650973866179d-2,-.5395239384953d-5, &\n            2.5066282746310005d0/\n!\n!-------- executable code\n!\nx=xx\ny=x\ntmp=x+5.5d0\ntmp=(x+0.5d0)*dlog(tmp)-tmp\nser=1.000000000190015d0\ndo j=1,6\n   y=y+1.d0\n   ser=ser+cof(j)/y\nenddo\ngammln=tmp+dlog(stp*ser/x)\nreturn\nend function gammln\n"
+    },
+    {
+        "instruction": "Create a Fortran function named mean that calculates the average of an array of real numbers. The function takes two input parameters: an integer representing the number of elements in the array (n) and a one-dimensional array of real numbers (x) with a length of n. The function returns a real number (m) as the average of the elements in the array.",
+        "test_case": {
+            "unit_test": "program main\n  use test_function\n  implicit none\n  integer :: n\n  real, allocatable :: x(:)\n  \n  !case1\n  n=5\n  allocate(x(n))\n  x = [1.0, 2.0, 3.0, 4.0, 5.0]\n  print *, mean(x, n)\n  deallocate(x)\n\n  !case2\n  n=6\n  allocate(x(n))\n  x = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]\n  print *, mean(x, n)\n  deallocate(x)\n\n  !case3\n  n=3\n  allocate(x(n))\n  x = [10.0, 20.0, 30.0]\n  print *, mean(x, n)\n  deallocate(x)\n\n  !case4\n  n=4\n  allocate(x(n))\n  x = [1.5, 2.5, 3.5, 4.5]\n  print *, mean(x, n)\n  deallocate(x)\n\n  !case5\n  n=7\n  allocate(x(n))\n  x = [2.1, 3.2, 1.9, 4.5, 5.6, 2.8, 3.9]\n  print *, mean(x, n)\n  deallocate(x)\nend program main\n  ",
+            "result": [
+                "3.00000000",
+                "0.00000000",
+                "20.0000000",
+                "3.00000000",
+                "3.42857146"
+            ]
+        },
+        "code": "   function mean(x, n) result(m)\n      implicit none\n      ! dummy arguments\n      integer, intent(in) :: n\n      real, intent(in), dimension(n) :: x\n\n      real :: m\n      ! processing\n      m = sum(x) / n\n   end function mean\n"
+    },
+    {
+        "instruction": "Provide a Fortran function named \"norm\" that calculates the Euclidean norm of a given vector. The function takes a one-dimensional array of double precision real numbers as input. The size of the vector can be variable. The function returns a single double precision real number as the result.",
+        "test_case": {
+            "unit_test": "program main\n  use test_function\n  implicit none\n  real(kind=8), allocatable :: vector(:)\n  integer :: i, n\n  \n  !case1\n  n = 5\n  allocate(vector(n))\n  vector = [1.0, -2.0, 3.0, -4.0, 5.0]\n  print *, norm(vector)\n  deallocate(vector)\n  \n  !case2\n  n = 7\n  allocate(vector(n))\n  vector = [0.5, 1.5, 2.5, -3.5, 4.5, -5.5, 6.5]\n  print *, norm(vector)\n  deallocate(vector)\n  \n  !case3\n  n = 4\n  allocate(vector(n))\n  vector = [2.0, -4.0, 6.0, -8.0]\n  print *, norm(vector)\n  deallocate(vector)\n  \n  !case4\n  n = 3\n  allocate(vector(n))\n  vector = [0.0, 0.0, 0.0]\n  print *, norm(vector)\n  deallocate(vector)\n  \n  !case5\n  n = 6\n  allocate(vector(n))\n  vector = [1.0, 2.0, 3.0, 4.0, 5.0, 6.0]\n  print *, norm(vector)\n  deallocate(vector)\n  \nend program main",
+            "result": [
+                "5.9160797830996161",
+                "8.3066238629180749",
+                "6.3245553203367590",
+                "0.0000000000000000",
+                "5.9160797830996161"
+            ]
+        },
+        "code": "    pure function norm(vector) result(res)\n        real(kind=8), dimension(:), intent(in) :: vector\n        real(kind=8) :: res\n        integer :: i\n        \n        res = 0\n        do i = 1, size(vector), 2\n            res = res + vector(i) ** 2\n        end do\n        \n        res = sqrt(res)\n    \n    end function norm\n"
+    },
+    {
+        "instruction": "Write a Fortran function code named e_friedmann_ray that calculates the value of the Friedmann equation for the given input parameters. The function takes three input arguments, z, om0, and ode0, all of which are real numbers. The function returns a real number, which is the value of the Friedmann equation.",
+        "test_case": {
+            "unit_test": "program main\n  use test_function\n  implicit none\n  real(8) :: z, om0, ode0\n\n  !case1\n  z = 0.5\n  om0 = 0.3\n  ode0 = 0.7\n  print *, e_friedmann_ray(z, om0, ode0)\n\n  !case2\n  z = 1.0\n  om0 = 0.5\n  ode0 = 0.5\n  print *, e_friedmann_ray(z, om0, ode0)\n\n  !case3\n  z = 0.2\n  om0 = 0.8\n  ode0 = 0.2\n  print *, e_friedmann_ray(z, om0, ode0)\n\n  !case4\n  z = 2.0\n  om0 = 0.1\n  ode0 = 0.9\n  print *, e_friedmann_ray(z, om0, ode0)\n\n  !case5\n  z = 1.5\n  om0 = 0.6\n  ode0 = 0.4\n  print *, e_friedmann_ray(z, om0, ode0)\n\nend program main",
+            "result": [
+                "1.3086252436477779",
+                "2.1213203435596424",
+                "1.2579348289475414",
+                "1.8973666004205085",
+                "3.1264997007019679"
+            ]
+        },
+        "code": "function e_friedmann_ray(z,om0,ode0)\n  implicit none\n  integer,parameter :: dl = kind(1.d0)\n  real(dl) :: e_friedmann_ray\n  real(dl), intent(in) :: z,om0,ode0\n  e_friedmann_ray = sqrt(om0*(1.0d0+z)**3+ode0)\nend function e_friedmann_ray\n"
+    },
+    {
+        "instruction": "Create a Fortran function named upper that converts a given string to uppercase. The function takes an input string of any length and optionally takes two integer parameters, begin and end, to specify the range of characters to convert. The function returns an output string with all lowercase letters converted to uppercase. The function is elemental and pure, meaning it can operate on arrays and has no side effects.",
+        "test_case": {
+            "unit_test": "program main\n  use test_function\n  implicit none\n  character(len=20) :: str\n  \n  !case1\n  str = 'Hello World'\n  print *, upper(str)\n  \n  !case2\n  str = 'abcdefghijklmnopqrstuvwxyz'\n  print *, upper(str)\n  \n  !case3\n  str = '1234abcd'\n  print *, upper(str)\n  \n  !case4\n  str = 'Testing 123'\n  print *, upper(str)\n  \n  !case5\n  str = 'UPPERCASE'\n  print *, upper(str)\n  \nend program main",
+            "result": [
+                "HELLO WORLD",
+                "ABCDEFGHIJKLMNOPQRST",
+                "1234ABCD",
+                "TESTING 123",
+                "UPPERCASE"
+            ]
+        },
+        "code": "elemental pure function upper(str,begin,end) result (string)\n\n! ident_27=\"@(#)m_strings::upper(3f): changes a string to uppercase\"\n\ncharacter(*), intent(in)      :: str                 ! inpout string to convert to all uppercase\ninteger, intent(in), optional :: begin,end\ncharacter(len(str))           :: string              ! output string that contains no miniscule letters\ninteger                       :: i                   ! loop counter\ninteger                       :: ibegin,iend\n   string = str                                      ! initialize output string to input string\n\n   ibegin = 1\n   if (present(begin))then\n      ibegin = max(ibegin,begin)\n   endif\n\n   iend = len_trim(str)\n   if (present(end))then\n      iend= min(iend,end)\n   endif\n\n   do i = ibegin, iend                               ! step thru each letter in the string in specified range\n       select case (str(i:i))\n       case ('a':'z')                                ! located miniscule letter\n          string(i:i) = char(iachar(str(i:i))-32)    ! change miniscule letter to uppercase\n       end select\n   end do\n\nend function upper\n"
+    },
+    {
+        "instruction": "Give me a Fortran function code named get_alphaa_hii that calculates the case a recombination coefficient for HII based on the temperature. The function takes one input argument of type real, representing the temperature in Kelvin. The output is also of type real and represents the computed recombination coefficient in cm3 s-1.",
+        "test_case": {
+            "unit_test": "program main\n  use test_function\n  implicit none\n  real(kind=8) :: tk\n  \n  !case1\n  tk = 100.0\n  print *, get_alphaa_hii(tk)\n  \n  !case2\n  tk = 500.0\n  print *, get_alphaa_hii(tk)\n\n  !case3\n  tk = 1000.0\n  print *, get_alphaa_hii(tk)\n  \n  !case4\n  tk = 2000.0\n  print *, get_alphaa_hii(tk)\n  \n  !case5\n  tk = 5000.0\n  print *, get_alphaa_hii(tk)\n  \nend program main",
+            "result": [
+                "8.5333122490591315E-012",
+                "3.1400327139010350E-012",
+                "2.0210729276507431E-012",
+                "1.2889514481951714E-012",
+                "6.9751290100190816E-013"
+            ]
+        },
+        "code": "elemental function get_alphaa_hii(tk)\n\n! returns case a rec. coefficient [cm3 s-1] for hii (hui&gnedin'97)\n! tk           => temperature [k]\n!------------------------------------------------------------------------\n  real(kind=8),intent(in)::tk\n  real(kind=8)::get_alphaa_hii, lambda\n!------------------------------------------------------------------------\n  lambda = 315614./tk\n  get_alphaa_hii =  1.269d-13 * lambda**1.503 &\n                     / ( ( 1.d0+(lambda/0.522)**0.47 )**1.923 )\nend function get_alphaa_hii\n"
+    },
+    {
+        "instruction": "Create a Fortran function named u that computes the value of a mathematical equation. The equation is defined as u = x^2 + x*y - 10, where x and y are real numbers. The function takes in two input arguments, x and y, and returns one output argument, u, which is also a real number.",
+        "test_case": {
+            "unit_test": "program main\n  use test_function\n  implicit none\n  real :: x, y\n  \n  !case1\n  x = 1.0\n  y = 2.0\n  print *, u(x, y)\n  \n  !case2\n  x = -3.5\n  y = 4.2\n  print *, u(x, y)\n  \n  !case3\n  x = 0.0\n  y = 5.0\n  print *, u(x, y)\n  \n  !case4\n  x = 2.5\n  y = -1.5\n  print *, u(x, y)\n  \n  !case5\n  x = 7.8\n  y = 0.9\n  print *, u(x, y)\n  \nend program main",
+            "result": [
+                "-7.00000000",
+                "-12.4499989",
+                "-10.0000000",
+                "-7.50000000",
+                "57.8600006"
+            ]
+        },
+        "code": "function u(x, y) !primera ecuaci\u00f3n\n  implicit none\n  real::x, y, u\n  u=x**2+x*y-10\nend function u\n"
+    },
+    {
+        "instruction": "Give me a Fortran function code named pux to calculate the partial derivative of a function u with respect to x. The function takes two arguments, x and y, both of type real. The function returns a single value of type real, representing the partial derivative.",
+        "test_case": {
+            "unit_test": "program main\n  use test_function\n  implicit none\n  real :: x, y\n\n  ! Test case 1\n  x = 2.0\n  y = 1.0\n  print *, pux(x, y)\n\n  ! Test case 2\n  x = 0.5\n  y = -0.2\n  print *, pux(x, y)\n\n  ! Test case 3\n  x = -1.0\n  y = 3.0\n  print *, pux(x, y)\n\n  ! Test case 4\n  x = 0.0\n  y = 0.0\n  print *, pux(x, y)\n\n  ! Test case 5\n  x = 10.0\n  y = -5.0\n  print *, pux(x, y)\n\nend program main",
+            "result": [
+                "5.00000000",
+                "0.800000012",
+                "1.00000000",
+                "0.00000000",
+                "15.0000000"
+            ]
+        },
+        "code": "function pux(x, y) !derivada parcial de u con respecto a x\n  implicit none\n  real::x, y, pux\n  pux=2*x+y\nend function pux\n"
+    },
+    {
+        "instruction": "Provide a Fortran function code named fahren that converts a temperature value from Celsius to Fahrenheit. The function takes a single input argument of type real, representing the temperature in Celsius. The function returns a single output argument of type real, representing the temperature in Fahrenheit.",
+        "test_case": {
+            "unit_test": "program main\n  use test_function\n  implicit none\n  real :: t\n\n  !case1\n  t = 0.0\n  print *, fahren(t)\n\n  !case2\n  t = -10.0\n  print *, fahren(t)\n\n  !case3\n  t = 25.0\n  print *, fahren(t)\n\n  !case4\n  t = 100.0\n  print *, fahren(t)\n\n  !case5\n  t = -273.15\n  print *, fahren(t)\n\nend program main",
+            "result": [
+                "32.0000000",
+                "14.0000000",
+                "77.0000000",
+                "212.000000",
+                "-459.669983"
+            ]
+        },
+        "code": "  function fahren (t)\n\n    ! converts from celsius to fahrenheit\n\n    implicit none\n\n    real, intent(in)          :: t\n    real                      :: fahren\n\n    fahren = (1.8 * t) + 32.\n  end function fahren\n"
+    },
+    {
+        "instruction": "Write a Fortran function named \"largest\" that finds and returns the largest element in a given array. The function takes one input argument, which is a one-dimensional array of real numbers. The size of the array is not specified. The output argument is a single real number, which will hold the largest value found in the array.",
+        "test_case": {
+            "unit_test": "program main\n  use test_function\n  implicit none\n  real, allocatable :: arr(:)\n  real :: value\n\n  !case1\n  allocate(arr(5))\n  arr = [1.0, 2.0, 3.0, 4.0, 5.0]\n  value = largest(arr)\n  print *, value\n  deallocate(arr)\n\n  !case2\n  allocate(arr(4))\n  arr = [5.0, 4.0, 3.0, 2.0]\n  value = largest(arr)\n  print *, value\n  deallocate(arr)\n\n  !case3\n  allocate(arr(3))\n  arr = [0.0, 0.0, 0.0]\n  value = largest(arr)\n  print *, value\n  deallocate(arr)\n\n  !case4\n  allocate(arr(6))\n  arr = [10.1, 10.2, 10.3, 10.4, 10.5, 10.6]\n  value = largest(arr)\n  print *, value\n  deallocate(arr)\n\n  !case5\n  allocate(arr(7))\n  arr = [-1.0, -2.0, -3.0, -4.0, -5.0, -6.0, -7.0]\n  value = largest(arr)\n  print *, value\n  deallocate(arr)\nend program main",
+            "result": [
+                "5.00000000",
+                "5.00000000",
+                "0.00000000",
+                "10.6000004",
+                "-1.00000000"
+            ]
+        },
+        "code": "function largest(arr) result(value)\nimplicit none\nreal, dimension(:), intent(in), target :: arr\nreal, pointer :: value\ninteger :: i\nnullify(value)\nallocate(value)\nvalue => arr(1)\ndo i = 2, size(arr)\n  if (arr(i) > value) then\n    value => arr(i)\n  end if\nend do\nend function largest\n"
+    },
+    {
+        "instruction": "Provide a Fortran function code named \"nearby\" to determine if a given value \"a\" is within a certain range defined by \"b\" and \"bola\". The function accepts three input parameters of real*8 type: \"a\", \"b\", and \"bola\". The function returns a logical value indicating whether \"a\" is within the range specified by \"b\" plus or minus \"bola\". The function should be used to check if \"a\" is nearby the range of \"b\".",
+        "test_case": {
+            "unit_test": "program main\n  use test_function\n  implicit none\n  real*8 :: a, b, bola\n  \n  !case1\n  a = 1.0\n  b = 2.0\n  bola = 0.5\n  print *, nearby(a, b, bola)\n\n  !case2\n  a = -1.0\n  b = 5.0\n  bola = 3.0\n  print *, nearby(a, b, bola)\n\n  !case3\n  a = 0.0\n  b = 0.0\n  bola = 0.0\n  print *, nearby(a, b, bola)\n\n  !case4\n  a = 10.0\n  b = 20.0\n  bola = 5.0\n  print *, nearby(a, b, bola)\n\n  !case5\n  a = -2.0\n  b = -4.0\n  bola = 3.0\n  print *, nearby(a, b, bola)\nend program main",
+            "result": [
+                "F",
+                "F",
+                "T",
+                "F",
+                "T"
+            ]
+        },
+        "code": "      function nearby(a,b,bola)\n      implicit none\n      real*8, intent(in) :: a,b,bola\n      logical :: nearby\n      nearby = .false.\n      if ((b-bola .le. a) .and. (a .le. b+bola)) then\n        nearby = .true.\n      end if\n!     print*, b-bola, \"<=\", a, \"<=\",b+bola ,\" :: \", nearby\n      end function nearby\n"
+    },
+    {
+        "instruction": "Create a Fortran function named \"is_sorted\" to determine whether the elements of a real array are sorted in ascending order. The function takes one input argument, \"values\", which is a one-dimensional real array. The function returns a logical value indicating whether the array is sorted (True) or not (False).",
+        "test_case": {
+            "unit_test": "program main\n  use test_function\n  implicit none\n  real, allocatable :: values(:)\n\n  !case1\n  allocate(values(5))\n  values = [1.0, 2.0, 3.0, 4.0, 5.0]\n  print *, is_sorted(values)\n  deallocate(values)\n\n  !case2\n  allocate(values(6))\n  values = [10.0, 9.0, 8.0, 7.0, 6.0, 5.0]\n  print *, is_sorted(values)\n  deallocate(values)\n\n  !case3\n  allocate(values(3))\n  values = [0.0, 0.0, 0.0]\n  print *, is_sorted(values)\n  deallocate(values)\n\n  !case4\n  allocate(values(4))\n  values = [-2.0, -1.0, 0.0, 1.0]\n  print *, is_sorted(values)\n  deallocate(values)\n\n  !case5\n  allocate(values(7))\n  values = [2.3132, 1.32, 1.32, 2.5354, 2.5354, 3.3192, 4.23912]\n  print *, is_sorted(values)\n  deallocate(values)\nend program main",
+            "result": [
+                "T",
+                "F",
+                "T",
+                "T",
+                "F"
+            ]
+        },
+        "code": "    function is_sorted(values) result(sorted_value)\n        implicit none\n        real, dimension(:), intent(in) :: values\n        logical :: sorted_value\n        integer :: i\n\n        sorted_value = .true.\n        do i = 2, size(values)\n            if (values(i) < values(i - 1)) then\n                sorted_value = .false.\n                exit\n            end if\n        end do\n    end function is_sorted\n"
+    },
+    {
+        "instruction": "Give me a Fortran function code named to_rna to convert a given DNA sequence into its corresponding RNA sequence. The function takes in a single input argument of type character array, representing the DNA sequence. The output is a character array storing the converted RNA sequence. The function uses a loop to iterate over each character in the DNA sequence and performs a selection based on the character type. The conversion rules are as follows: 'g' is converted to 'c', 'c' is converted to 'g', 't' is converted to 'a', and 'a' is converted to 'u'. If an invalid character is encountered, an empty string is returned.",
+        "test_case": {
+            "unit_test": "program main\n  use test_function\n  implicit none\n  character(len=4) :: dna\n\n  !case1\n  dna = 'gcta'\n  print *, to_rna(dna)\n\n  !case2\n  dna = 'atcg'\n  print *, to_rna(dna)\n\n  !case3\n  dna = 'cgta'\n  print *, to_rna(dna)\n\n  !case4\n  dna = 'tttt'\n  print *, to_rna(dna)\n\n  !case5\n  dna = 'gtac'\n  print *, to_rna(dna)\nend program main",
+            "result": [
+                "cgau",
+                "uagc",
+                "gcau",
+                "aaaa",
+                "caug"
+            ]
+        },
+        "code": "  function to_rna(dna)\n      character(*) :: dna\n      character(len(dna)) :: to_rna\n      integer :: i\n\n      do i = 1,len(dna)\n        select case (dna(i:i))\n            case ('g')\n                to_rna(i:i) = 'c'\n            case ('c')\n                to_rna(i:i) = 'g'\n            case ('t')\n                to_rna(i:i) = 'a'\n            case ('a')\n                to_rna(i:i) = 'u'\n            case default\n                to_rna = ''\n                return\n        end select\n      end do\n\n  end function to_rna\n"
+    },
+    {
+        "instruction": "Write a Fortran function named loggamma that calculates the logarithm of the gamma function for a given double precision input value. The function takes one input argument of type double precision and returns one output argument of the same type. The name of the function is loggamma.",
+        "test_case": {
+            "unit_test": "program main\n  use test_function\n  implicit none\n  double precision :: s\n  \n  !case1\n  s = 0.5d0\n  print *, loggamma(s)\n\n  !case2\n  s = 1.0d0\n  print *, loggamma(s)\n\n  !case3\n  s = 2.5d0\n  print *, loggamma(s)\n\n  !case4\n  s = 10.0d0\n  print *, loggamma(s)\n\n  !case5\n  s = 100.0d0\n  print *, loggamma(s)\nend program main",
+            "result": [
+                "-2.2560358675712115E+038",
+                "-1.9461246904504267E+035",
+                "-1.7110120140331071E+033",
+                "-1.6707296898387507E+030",
+                "-1.6707296870848007E+025"
+            ]
+        },
+        "code": "  function loggamma(s)\n    double precision, intent(in) :: s\n    double precision :: loggamma\n    double precision :: x, v, w\n    x = s\n    v = 1.0d0\n    do while (x < cn)\n       v = v * x\n       x = x + 1.0d0\n    end do\n    w = 1.0d0 / (x * x)\n    loggamma = ((((((((b16 / (16.0d0 * 15.0d0)) * w &\n         + (b14 / (14.0d0 * 13.0d0))) * w &\n         + (b12 / (12.0d0 * 11.0d0))) * w &\n         + (b10 / (10.0d0 * 9.0d0))) * w &\n         + (b8 / (8.0d0 * 7.0d0))) * w &\n         + (b6 / (6.0d0 * 5.0d0))) * w &\n         + (b4 / (4.0d0 * 3.0d0))) * w &\n         + (b2 / (2.0d0 * 1.0d0))) / x &\n         + 0.5d0 * log2pi - log(v) - x + (x - 0.5d0) * log(x)\n    return\n  end function loggamma\n"
+    },
+    {
+        "instruction": "Write a Fortran function code named horner that implements the Horner's method for polynomial evaluation. The function takes an array of real coefficients and a real value as input parameters. It returns a real value as the result. The number of input arguments is 2 and their types are [real, real]. The number of output arguments is 1 and its type is real.",
+        "test_case": {
+            "unit_test": "program main\n  use test_function\n  implicit none\n  real, allocatable :: coeffs(:)\n  real :: x\n  \n  !case1\n  allocate(coeffs(3))\n  coeffs = [1.0, -2.0, 3.0]\n  x = 2.0\n  print *, horner(coeffs, x)\n  deallocate(coeffs)\n\n  !case2\n  allocate(coeffs(4))\n  coeffs = [-1.0, 2.0, -3.0, 4.0]\n  x = -1.5\n  print *, horner(coeffs, x)\n  deallocate(coeffs)\n\n  !case3\n  allocate(coeffs(5))\n  coeffs = [1.0, 0.0, -5.0, 0.0, 1.0]\n  x = 3.0\n  print *, horner(coeffs, x)\n  deallocate(coeffs)\n\n  !case4\n  allocate(coeffs(2))\n  coeffs = [0.0, 1.0]\n  x = 0.5\n  print *, horner(coeffs, x)\n  deallocate(coeffs)\n\n  !case5\n  allocate(coeffs(4))\n  coeffs = [2.0, -3.0, 1.0, -4.0]\n  x = 0.75\n  print *, horner(coeffs, x)\n  deallocate(coeffs)\nend program main",
+            "result": [
+                "9.00000000",
+                "-24.2500000",
+                "37.0000000",
+                "0.500000000",
+                "-1.37500000"
+            ]
+        },
+        "code": "  function horner (coeffs, x) result (res)\n\n    implicit none\n    real, dimension (:), intent (in) :: coeffs\n    real, intent (in) :: x\n    real :: res\n    integer :: i\n\n    res = 0.0\n    do i = size (coeffs), 1, -1\n      res = res * x + coeffs (i)\n    end do\n\n  end function horner\n"
+    },
+    {
+        "instruction": "Give me a Fortran function code named substitution that performs matrix substitution. The function takes a 2-dimensional real array as input and returns a 2-dimensional real array as output. The number of input arguments is 1 and the data type is [real, dimension(:, :), intent(in)]. The number of output arguments is 1 and the data type is [real, dimension(size(mat, 1), size(mat, 2))]. The function performs a backward substitution algorithm on the input matrix to solve a system of linear equations.",
+        "test_case": {
+            "unit_test": "program main\n  use test_function\n  implicit none\n  integer :: n, m\n  real, allocatable :: mat(:,:)\n  \n  !case1\n  n=3\n  m=3\n  allocate(mat(n,m))\n  mat = reshape([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0], [n, m])\n  print *, substitution(mat)\n  deallocate(mat)\n\n  !case2\n  n=4\n  m=4\n  allocate(mat(n,m))\n  mat = reshape([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0], [n, m])\n  print *, substitution(mat)\n  deallocate(mat)\n\n  !case3\n  n=2\n  m=5\n  allocate(mat(n,m))\n  mat = reshape([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0], [n, m])\n  print *, substitution(mat)\n  deallocate(mat)\n\n  !case4\n  n=5\n  m=2\n  allocate(mat(n,m))\n  mat = reshape([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0], [n, m])\n  print *, substitution(mat)\n  deallocate(mat)\n\n  !case5\n  n=4\n  m=4\n  allocate(mat(n,m))\n  mat = reshape([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0], [n, m])\n  print *, substitution(mat)\n  deallocate(mat)\nend program main",
+            "result": [
+                "-616.000000      -704.000000      -792.000000      -38.0000000      -43.0000000      -48.0000000       7.00000000       8.00000000       9.00000000",
+                "-78672632.0      -84735344.0      -90798048.0      -96860760.0      -15450.0000      -16640.0000      -17830.0000      -19020.0000      -147.000000      -158.000000      -169.000000      -180.000000       13.0000000       14.0000000       15.0000000       16.0000000",
+                "-2008125.00      -2248802.00      -16448.0000      -18418.0000      -132.000000      -148.000000       7.00000000       8.00000000       9.00000000       10.0000000",
+                "-11.0000000      -12.0000000      -13.0000000      -14.0000000      -15.0000000       6.00000000       7.00000000       8.00000000       9.00000000       10.0000000",
+                "-78672632.0      -84735344.0      -90798048.0      -96860760.0      -15450.0000      -16640.0000      -17830.0000      -19020.0000      -147.000000      -158.000000      -169.000000      -180.000000       13.0000000       14.0000000       15.0000000       16.0000000"
+            ]
+        },
+        "code": "  pure function substitution(mat) result(a)\n    real, dimension(:, :), intent(in) :: mat\n    real, dimension(size(mat, 1), size(mat, 2)) :: a\n    integer :: i, j, m\n\n    m = size(mat, 2)\n    a = mat\n\n    do i = m - 1, 1, -1\n      do j = i + 1, m\n        a(:, i) = a(:, i) - a(j, i) * a(:, j)\n      enddo\n    enddo\n  end function\n"
+    },
+    {
+        "instruction": "Create a Fortran function named tnx to calculate the value of the nth term in the Taylor series expansion of the tangent function. The function takes two input arguments: x (real) and n (integer). The function returns a single output value, tnx (real). The function uses an array named vector to store intermediate values during the computation. The value of pi is predefined as acos(-1.0). To compute tnx, the function iteratively calculates the values in the vector array using the recurrence relation 2*x*vector(i) - vector(i-1). The function returns the desired value tnx.",
+        "test_case": {
+            "unit_test": "program main\n  use test_function\n  implicit none\n  real :: x\n  integer :: n\n\n  !case1\n  x = 0.5\n  n = 5\n  print *, tnx(x, n)\n\n  !case2\n  x = 1.0\n  n = 3\n  print *, tnx(x, n)\n\n  !case3\n  x = -0.2\n  n = 4\n  print *, tnx(x, n)\n\n  !case4\n  x = 1.5\n  n = 6\n  print *, tnx(x, n)\n\n  !case5\n  x = -1.0\n  n = 2\n  print *, tnx(x, n)\n  \nend program main",
+            "result": [
+                "0.500000000",
+                "1.00000000",
+                "0.692799985",
+                "161.000000",
+                "1.00000000"
+            ]
+        },
+        "code": "function tnx(x, n) \n    implicit none\n    real, parameter :: pi = acos(-1.0) \n    real:: x, tnx \n    integer:: n, i\n    real, dimension(0:n):: vector\n    vector(0) = 1\n    vector(1) = x \n    if(n .le. 1) then \n        tnx = vector(n)\n    else\n        do i = 1, n-1 \n            vector(i+1) = 2.0*x*vector(i) - vector(i-1) \n        enddo\n        tnx = vector(n)\n    endif\n    return\nend function tnx\n"
+    },
+    {
+        "instruction": "Write a Fortran function named power_2_check that checks if a given integer number is a power of 2. The function takes one input argument of type integer and returns a logical value. The function calculates the logarithm of the input number with base 2 and rounds it to the nearest integer. If the absolute difference between the rounded value and the logarithm is less than a small threshold, the function returns true indicating that the number is a power of 2. Otherwise, it returns false.",
+        "test_case": {
+            "unit_test": "program main\n  use test_function\n  implicit none\n  integer :: n\n  \n  !case1\n  n = 2\n  print *, power_2_check(n)\n  \n  !case2\n  n = 4\n  print *, power_2_check(n)\n\n  !case3\n  n = 16\n  print *, power_2_check(n)\n\n  !case4\n  n = 9\n  print *, power_2_check(n)\n\n  !case5\n  n = 64\n  print *, power_2_check(n)\n  \nend program main",
+            "result": [
+                "T",
+                "T",
+                "T",
+                "F",
+                "T"
+            ]
+        },
+        "code": "  function power_2_check( n )\n    implicit none\n    logical :: power_2_check\n    integer,intent(in)  :: n\n    real(8) :: x\n    integer :: i\n    x = log(dble(n))/log(2.0d0)\n    i = nint(x)\n    if ( abs(x-i) < 1.d-10 ) then\n       power_2_check = .true.\n    else\n       power_2_check = .false.\n    end if\n  end function power_2_check\n"
+    },
+    {
+        "instruction": "Write a Fortran function code named bin that calculates the binomial coefficient of two numbers. The binomial coefficient is computed using the formula C(n, k) = n! / (k! * (n-k)!), where n and k are integers. The function takes two input arguments, n and k, both of integer type. The function also returns a single output argument, bin, of real*8 type.",
+        "test_case": {
+            "unit_test": "program main\n  use test_function\n  implicit none\n  integer :: n, k\n  real*8 :: result\n  \n  !case1\n  n = 5\n  k = 2\n  result = bin(n, k)\n  print *, result\n  \n  !case2\n  n = 8\n  k = 3\n  result = bin(n, k)\n  print *, result\n  \n  !case3\n  n = 10\n  k = 4\n  result = bin(n, k)\n  print *, result\n  \n  !case4\n  n = 7\n  k = 5\n  result = bin(n, k)\n  print *, result\n  \n  !case5\n  n = 12\n  k = 6\n  result = bin(n, k)\n  print *, result\n  \nend program main",
+            "result": [
+                "10.000000000000000",
+                "56.000000000000000",
+                "210.00000000000000",
+                "21.000000000000000",
+                "924.00000000000000"
+            ]
+        },
+        "code": "          function bin(n, k)\n\n              implicit none\n              integer, intent (in) :: n\n              integer, intent (in) :: k\n              integer :: i\n              real*8 :: bin\n\n              bin = 1\n\n              do i=1,k\n                  bin = bin * (n - i + 1) / i\n              enddo\n\n              return\n\n          end function bin\n"
+    },
+    {
+        "instruction": "Provide a Fortran function named csr_index to search for the index of a specific element in a Compressed Sparse Row (CSR) matrix representation. The function takes four input arguments, all of integer type: i, j, ja, and ia. The variable i represents the row index, j represents the column index, ja is an array containing the column indices of non-zero elements in the matrix, and ia is an array containing the indices of the first non-zero element in each row. The function returns an integer value, kij, which is the index of the element (i, j) in the ja array. If the element is not found, the function returns -1.",
+        "test_case": {
+            "unit_test": "program main\n  use test_function\n  implicit none\n  integer :: i, j, kij\n  integer, allocatable :: ja(:), ia(:)\n  \n  !case1\n  i = 2\n  j = 3\n  allocate(ja(5))\n  allocate(ia(3))\n  ja = [1, 2, 3, 4, 5]\n  ia = [1, 3, 6]\n  print *, csr_index(i, j, ja, ia)\n  deallocate(ja)\n  deallocate(ia)\n\n  !case2\n  i = 4\n  j = 1\n  allocate(ja(6))\n  allocate(ia(5))\n  ja = [1, 2, 3, 4, 5, 6]\n  ia = [1, 4, 7, 9, 10]\n  print *, csr_index(i, j, ja, ia)\n  deallocate(ja)\n  deallocate(ia)\n\n  !case3\n  i = 3\n  j = 5\n  allocate(ja(8))\n  allocate(ia(4))\n  ja = [1, 2, 3, 4, 5, 6, 7, 8]\n  ia = [1, 3, 6, 8]\n  print *, csr_index(i, j, ja, ia)\n  deallocate(ja)\n  deallocate(ia)\n\n  !case4\n  i = 1\n  j = 2\n  allocate(ja(7))\n  allocate(ia(6))\n  ja = [1, 2, 3, 4, 5, 6, 7]\n  ia = [1, 1, 2, 4, 5, 7]\n  print *, csr_index(i, j, ja, ia)\n  deallocate(ja)\n  deallocate(ia)\n\n  !case5\n  i = 5\n  j = 5\n  allocate(ja(10))\n  allocate(ia(6))\n  ja = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]\n  ia = [1, 3, 5, 7, 9, 10]\n  print *, csr_index(i, j, ja, ia)\n  deallocate(ja)\n  deallocate(ia)\nend program main\n    ",
+            "result": [
+                "3",
+                "-1",
+                "-1",
+                "-1",
+                "-1"
+            ]
+        },
+        "code": "function csr_index(i,j,ja,ia) result(kij)\n  integer,intent(in)::i,j\n  integer,dimension(:),intent(in)::ja,ia\n  integer::kij\n\n  do kij=ia(i),ia(i+1)-1\n    select case(ja(kij)-j)\n    case(0)\n      return\n    end select\n  end do\n\n  kij=-1\nend function\n"
+    },
+    {
+        "instruction": "Provide a Fortran function named haversine that calculates the great circle distance between two geographical coordinates in degrees. The function takes four input arguments of type real*8, which represent the longitude and latitude values of the two coordinates (deglat1, deglon1, deglat2, deglon2). The function returns the distance between the coordinates as a real*8 value.",
+        "test_case": {
+            "unit_test": "program main\n  use test_function\n  implicit none\n  real*8 :: deglon1, deglon2, deglat1, deglat2\n  \n  ! case 1\n  deglon1 = 40.7128\n  deglon2 = 74.0060\n  deglat1 = -74.0059\n  deglat2 = 51.5074\n  print *, haversine(deglon1, deglon2, deglat1, deglat2)\n\n  ! case 2\n  deglon1 = -122.4194\n  deglon2 = -87.6298\n  deglat1 = 37.7749\n  deglat2 = 41.8781\n  print *, haversine(deglon1, deglon2, deglat1, deglat2)\n\n  ! case 3\n  deglon1 = 2.3522\n  deglon2 = 4.8952\n  deglat1 = 48.8566\n  deglat2 = 52.3702\n  print *, haversine(deglon1, deglon2, deglat1, deglat2)\n\n  ! case 4\n  deglon1 = -0.1276\n  deglon2 = 2.3522\n  deglat1 = 51.5074\n  deglat2 = 48.8566\n  print *, haversine(deglon1, deglon2, deglat1, deglat2)\n\n  ! case 5\n  deglon1 = -118.2437\n  deglon2 = -87.6298\n  deglat1 = 34.0522\n  deglat2 = 41.8781\n  print *, haversine(deglon1, deglon2, deglat1, deglat2)\n  \nend program main",
+            "result": [
+                "9.2020514158346376E-080",
+                "1.8031175198377314E-083",
+                "2.2325172726861268E-084",
+                "1.8683956473623094E-084",
+                "1.6264438490773561E-083"
+            ]
+        },
+        "code": "      function haversine(deglon1,deglon2,deglat1,deglat2) result (dist)\n          ! great circle distance -- adapted from matlab \n          real*8,intent(in) :: deglat1,deglon1,deglat2,deglon2\n          real*8 :: a,c,dist,dlat,dlon,lat1,lat2\n \n          dlat = deg2rad*(deglat2-deglat1)\n          dlon = deg2rad*(deglon2-deglon1)\n          lat1 = deg2rad*(deglat1)\n          lat2 = deg2rad*(deglat2)\n          a = ( sin(0.5d0*dlat) )**2 + &\n                cos(lat1) * cos(lat2) * ( sin(0.5d0*dlon) )**2\n          c = 2d0*asin( sqrt(a) )\n          dist = rearth*c\n      end function haversine\n"
+    },
+    {
+        "instruction": "Create a Fortran function named \"phid\" that calculates the probability density function (PDF) value for a given standard deviation \"z\" according to the normal distribution. The function takes in a single input parameter of type real (dp) and returns a single output parameter of the same type. The function uses a set of predefined constants and mathematical calculations to accurately compute the PDF value. Follow the provided comments and implement the necessary logic in the function.",
+        "test_case": {
+            "unit_test": "program main\n  use test_function\n  implicit none\n  integer, parameter :: dp = selected_real_kind(12, 60)\n  real (dp) :: z\n  \n  !case1\n  z = 0.0_dp\n  print *, phid(z)\n  \n  !case2\n  z = 1.96_dp\n  print *, phid(z)\n  \n  !case3\n  z = -2.33_dp\n  print *, phid(z)\n  \n  !case4\n  z = 3.5_dp\n  print *, phid(z)\n  \n  !case5\n  z = -4.99_dp\n  print *, phid(z)\n  \nend program main",
+            "result": [
+                "0.50000000000000000",
+                "0.97500210485177952",
+                "9.9030755591642400E-003",
+                "0.99976737092096446",
+                "3.0189646253424719E-007"
+            ]
+        },
+        "code": "function phid(z) result(fn_val)\r\n\r\n! normal distribution probabilities accurate to 1.e-15.\r\n! z = no. of standard deviations from the mean.\r\n! p, q = probabilities to the left & right of z.   p + q = 1.\r\n!       pdf = the probability density.\r\n\n!       hart, j.f. et al, 'computer approximations', wiley 1968\r\n\r\n!       programmer: alan miller, modified by alan genz\r\n\r\n! latest revision of fortran 77 version - 30 march 1986\r\n! latest revision of fortran 90 version - 23 june 1997\r\n\r\nimplicit none\r\ninteger, parameter     :: dp = selected_real_kind(12, 60)\r\nreal (dp), intent(in)  :: z\r\nreal (dp)              :: fn_val\r\n\r\n! local variables\r\nreal (dp), parameter :: p0 = 220.2068679123761_dp, p1 = 221.2135961699311_dp,  &\r\n                        p2 = 112.0792914978709_dp, p3 = 33.91286607838300_dp,  &\r\n                        p4 = 6.373962203531650_dp, p5 = .7003830644436881_dp,  &\r\n                        p6 = 0.03526249659989109_dp,  &\r\n                        q0 = 440.4137358247522_dp, q1 = 793.8265125199484_dp,  &\r\n                        q2 = 637.3336333788311_dp, q3 = 296.5642487796737_dp,  &\r\n                        q4 = 86.78073220294608_dp, q5 = 16.06417757920695_dp,  &\r\n                        q6 = 1.755667163182642_dp, q7 = .8838834764831844d-1, &\r\n                        cutoff = 7.071067811865475_dp\r\n\r\nreal (dp)            :: zabs, expntl\r\n\r\nzabs = abs(z)\r\n\r\n! |z| > 37.\r\n\r\nif (zabs > 37._dp) then\r\n    fn_val = 0._dp\r\n  else\r\n\r\n! |z| <= 37.\r\n\r\n    expntl = exp(-0.5_dp*zabs**2)\r\n\r\n! |z| < cutoff = 10/sqrt(2).\r\n\r\n  if (zabs < cutoff) then\r\n      fn_val = expntl*((((((p6*zabs + p5)*zabs + p4)*zabs + p3)*zabs + p2)*zabs     &\r\n                 + p1)*zabs + p0) / (((((((q7*zabs + q6)*zabs + q5)*zabs &\r\n                 + q4)*zabs + q3)*zabs + q2)*zabs + q1)*zabs +q0)\r\n  \r\n! |z| >= cutoff.\r\n  \r\n  else\r\n    fn_val = expntl/(zabs + 1._dp/(zabs + 2._dp/(zabs + 3._dp/(zabs +  &\r\n                     4._dp/(zabs + 0.65_dp)))))\r\n  end if\r\nend if\r\n\r\nif (z > 0.0_dp) fn_val = 1.0_dp - fn_val\r\n\r\nreturn\r\nend function phid\r\n"
+    },
+    {
+        "instruction": "Create a Fortran function named all_ones_consecutive that checks if a given array of integers has all ones consecutively. The function takes an input array of 18 integers and returns a logical value.",
+        "test_case": {
+            "unit_test": "program main\n  use test_function\n  implicit none\n  integer, parameter :: n = 18\n  integer :: array(n)\n  \n  !case1\n  array = [1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1]\n  print *, all_ones_consecutive(array)\n\n  !case2\n  array = [0, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1]\n  print *, all_ones_consecutive(array)\n\n  !case3\n  array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1]\n  print *, all_ones_consecutive(array)\n\n  !case4\n  array = [1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]\n  print *, all_ones_consecutive(array)\n\n  !case5\n  array = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]\n  print *, all_ones_consecutive(array)\nend program main\n    ",
+            "result": [
+                "F",
+                "F",
+                "T",
+                "F",
+                "T"
+            ]
+        },
+        "code": "\tfunction all_ones_consecutive(array)\n\t\tinteger, dimension(18) :: array\n\t\tlogical :: all_ones_consecutive\n\t\tinteger :: first_one_index, last_one_index, i, sum_result\n\n\t\ti = 1\n\t\tdo while(i <= 18)\n\t\t\tif(array(i) == 1) then\n\t\t\t\tfirst_one_index = i\n\t\t\t\texit\n\t\t\tend if\n\t\t\ti = i + 1\n\t\tend do\n\n\t\ti = 18\n\t\tdo while(i >= 1)\n\t\t\tif(array(i) == 1) then\n\t\t\t\tlast_one_index = i\n\t\t\t\texit\n\t\t\tend if\n\t\t\ti = i - 1\n\t\tend do\n\n\t\tsum_result = 0\n\t\tdo i = first_one_index, last_one_index\n\t\t\tsum_result = sum_result + array(i)\n\t\tend do\n\n\t\tif(last_one_index - first_one_index + 1 == sum_result) then\n\t\t\tall_ones_consecutive = .true.\n\t\telse\n\t\t\tall_ones_consecutive = .false.\n\t\tend if\t\t\t\t\t\t\n\tend function all_ones_consecutive\n"
+    },
+    {
+        "instruction": "Give me a Fortran function code named sils_idiag to calculate the displacement of a diagonal entry in a row of an assembled matrix. The code takes two input arguments, both of type integer, with names ix and iy. The output, also of type integer, is the displacement of the diagonal entry.",
+        "test_case": {
+            "unit_test": "program main\n  use test_function\n  implicit none\n  integer :: ix, iy\n  \n  !case1\n  ix = 3\n  iy = 2\n  print *, sils_idiag(ix, iy)\n\n  !case2\n  ix = 5\n  iy = 4\n  print *, sils_idiag(ix, iy)\n\n  !case3\n  ix = 6\n  iy = 1\n  print *, sils_idiag(ix, iy)\n\n  !case4\n  ix = 4\n  iy = 3\n  print *, sils_idiag(ix, iy)\n\n  !case5\n  ix = 8\n  iy = 6\n  print *, sils_idiag(ix, iy)\n\nend program main",
+            "result": [
+                "3",
+                "12",
+                "0",
+                "7",
+                "30"
+            ]
+        },
+        "code": "       function sils_idiag( ix, iy )\n\n!  obtain the displacement from the start of the assembled matrix (of order ix)\n!  of the diagonal entry in its row iy\n\n!-----------------------------------------------\n!   d u m m y   a r g u m e n t s\n!-----------------------------------------------\n\n       integer :: sils_idiag\n       integer, intent( in ) :: ix, iy\n\n       sils_idiag = ( ( iy - 1 ) * ( 2 * ix - iy + 2 ) ) / 2\n       return\n\n\n       end function sils_idiag\n"
+    },
+    {
+        "instruction": "Give me a Fortran function code named sqrt_to_odd1 that calculates the nearest odd number greater than or equal to the square root of a given input. The number of input arguments is 1 and their type is integer. The number of output arguments is 1 and its type is also integer.",
+        "test_case": {
+            "unit_test": "program main\n  use test_function\n  implicit none\n  integer :: n2, od\n  \n  !case1\n  n2=16\n  print *, sqrt_to_odd1(n2)\n  \n  !case2\n  n2=25\n  print *, sqrt_to_odd1(n2)\n  \n  !case3\n  n2=10\n  print *, sqrt_to_odd1(n2)\n  \n  !case4\n  n2=35\n  print *, sqrt_to_odd1(n2)\n  \n  !case5\n  n2=50\n  print *, sqrt_to_odd1(n2)\n  \nend program main",
+            "result": [
+                "3",
+                "5",
+                "3",
+                "5",
+                "7"
+            ]
+        },
+        "code": "function sqrt_to_odd1(n2) result(od)\ninteger  :: n2, od\ninteger  :: j, k\n! gieven input n2, find closest od >= 3, such that od^2 == n2\n\nj  = floor( (sqrt(real(n2))-1.)/2. )\nk  = j+1\n\nj  = 2*j+1  ! odd\nk  = 2*k+1  ! odd\n\nif (n2 - j**2 <= k**2 - n2) then\n  od = j\nelse\n  od = k\nend if\nod = max(1, od)\n\nend function\n"
+    },
+    {
+        "instruction": "Write a Fortran function code named outerand that calculates the element-wise logical AND operation between two logical arrays. The function takes two input arguments, which are arrays of logical values. The input arrays should have the same shape. The function returns an output array of the same shape as the input arrays, where each element is the logical AND result of the corresponding elements in the input arrays. Use the Fortran keywords \"function\", \"logical\", \"dimension\", \"intent\", \"size\", \"spread\", and \"and\" in your code. The number of input arguments is 2 and the data type is logical arrays. The number of output arguments is 1 and the data type is a logical array.",
+        "test_case": {
+            "unit_test": "program main\n  use test_function\n  implicit none\n  logical, allocatable :: a(:), b(:)\n  \n  !case1\n  allocate(a(3))\n  allocate(b(3))\n  a = [.true., .false., .true.]\n  b = [.true., .true., .false.]\n  print *, outerand(a, b)\n  deallocate(a, b)\n\n  !case2\n  allocate(a(4))\n  allocate(b(2))\n  a = [.true., .false., .true., .false.]\n  b = [.true., .true.]\n  print *, outerand(a, b)\n  deallocate(a, b)\n\n  !case3\n  allocate(a(5))\n  allocate(b(5))\n  a = [.true., .true., .true., .true., .true.]\n  b = [.false., .false., .false., .false., .false.]\n  print *, outerand(a, b)\n  deallocate(a, b)\n\n  !case4\n  allocate(a(2))\n  allocate(b(3))\n  a = [.true., .false.]\n  b = [.true., .true., .true.]\n  print *, outerand(a, b)\n  deallocate(a, b)\n\n  !case5\n  allocate(a(1))\n  allocate(b(1))\n  a = [.true.]\n  b = [.false.]\n  print *, outerand(a, b)\n  deallocate(a, b)\nend program main",
+            "result": [
+                "T F T T F T F F F",
+                "T F T F T F T F",
+                "F F F F F F F F F F F F F F F F F F F F F F F F F",
+                "T F T F T F",
+                "F"
+            ]
+        },
+        "code": "  pure function outerand (a,b)\n\n    implicit none\n    logical, dimension(:), intent(in) :: a, b\n    logical, dimension(size(a),size(b)) :: outerand\n\n    outerand = spread(a,dim=2,ncopies=size(b)) .and. & \n               spread(b,dim=1,ncopies=size(a))\n\n  end function outerand\n"
+    },
+    {
+        "instruction": "Create a Fortran function named r8deg2rad that converts an angle given in degrees to radians. The function takes one input parameter of type real(8) named angle, and returns one output parameter of the same type named r8deg2rad. The value of pi is calculated using the expression 4.0d0*atan(1.0d0). Use this value to convert the angle from degrees to radians by multiplying it with the angle divided by 180.0d0.",
+        "test_case": {
+            "unit_test": "program main\n  use test_function\n  implicit none\n  real(8) :: angle\n  \n  !case1\n  angle = 45.0d0\n  print *, r8deg2rad(angle)\n\n  !case2\n  angle = 90.0d0\n  print *, r8deg2rad(angle)\n\n  !case3\n  angle = 180.0d0\n  print *, r8deg2rad(angle)\n\n  !case4\n  angle = 360.0d0\n  print *, r8deg2rad(angle)\n\n  !case5\n  angle = -45.0d0\n  print *, r8deg2rad(angle)\nend program main",
+            "result": [
+                "0.78539816339744828",
+                "1.5707963267948966",
+                "3.1415926535897931",
+                "6.2831853071795862",
+                "-0.78539816339744828"
+            ]
+        },
+        "code": " function r8deg2rad(angle)\n  implicit none\n  real(8) :: r8deg2rad,angle\n  real(8), parameter :: pi=4.0d0*atan(1.0d0)\n\n  r8deg2rad=angle*(pi/180.0d0)\n end function r8deg2rad\n"
+    }
+]

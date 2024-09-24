@@ -32,7 +32,7 @@ def call_api(messages, temperature=0.8,max_tokens=2048):
     "Authorization": f"Bearer {api_key}"
 }
     data = {
-    "model": "gpt-3.5-turbo",
+    "lora_model": "gpt-3.5-turbo",
     "messages": messages,
     "max_tokens":max_tokens,
     "temperature":temperature
