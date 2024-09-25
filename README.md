@@ -1,6 +1,6 @@
 # About
 + **<font style="color:rgb(31, 35, 40);">Fortrancoder</font>**<font style="color:rgb(31, 35, 40);"> is a model empowered by </font>**<font style="color:rgb(31, 35, 40);">Evol-Code, </font>**<font style="color:rgb(31, 35, 40);">a novel approach to improve Fortran Programming for LLMs.</font>
-+ **<font style="color:rgb(31, 35, 40);">Evol-Code</font>**** **extends the diversity of instructions with data collected from real programming scenarios to improve the overall programming capabilities of LLM.
++ **<font style="color:rgb(31, 35, 40);">Evol-Code</font>** extends the diversity of instructions with data collected from real programming scenarios to improve the overall programming capabilities of LLM.
 + **FortranEval** is a benchmark dataset that comprehensively evaluates the Fortran programming capabilities of LLM. It includes both **function** and **subroutine**, and comprehensive programming tasks including scientific computing and general programming tasks.
 
 💫Important !!!!!
