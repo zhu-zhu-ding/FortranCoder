@@ -1,4 +1,4 @@
-<h1 id="AkQtx">About</h1>
+# About
 + **<font style="color:rgb(31, 35, 40);">Fortrancoder</font>**<font style="color:rgb(31, 35, 40);"> is a model empowered by </font>**<font style="color:rgb(31, 35, 40);">Evol-Code, </font>**<font style="color:rgb(31, 35, 40);">a novel approach to improve Fortran Programming for LLMs.</font>
 + **Evol-Code **extends the diversity of instructions with data collected from real programming scenarios to improve the overall programming capabilities of LLM.
 + **FortranEval** is a benchmark dataset that comprehensively evaluates the Fortran programming capabilities of LLM. It includes both **function** and **subroutine**, and comprehensive programming tasks including scientific computing and general programming tasks.
@@ -9,18 +9,18 @@
 
 ![](https://cdn.nlark.com/yuque/0/2024/png/38861830/1727250691535-0f8c97b0-4250-4b56-aea5-2b75fddf3952.png)
 
-<h1 id="dv8M1">🤖Models</h1>
+# 🤖Models
 | **<font style="color:rgb(31, 35, 40);">Model</font>** | **<font style="color:rgb(31, 35, 40);">Checkpoint</font>** | **<font style="color:rgb(31, 35, 40);">Size</font>** | **<font style="color:rgb(31, 35, 40);">pass@1</font>** | **<font style="color:rgb(31, 35, 40);">pass_c@1</font>** | **<font style="color:rgb(31, 35, 40);">License</font>** |
 | --- | --- | --- | --- | --- | --- |
 | FortranCoder-DS-6.7B | <font style="color:rgb(31, 35, 40);">🤗</font><font style="color:rgb(31, 35, 40);"> </font>[HF_Link](https://huggingface.co/zzzzd/FortranCoder-DS-6.7B/tree/main) | 6.7B | 32.5(<font style="color:rgb(31, 35, 40);">27.4)</font> | 80.8(<font style="color:rgb(31, 35, 40);">70.9)</font> | [DeepSeek](https://github.com/deepseek-ai/DeepSeek-Coder/blob/main/LICENSE-MODEL) |
 
 
-<h1 id="pxdlp">📚<font style="color:rgb(31, 35, 40);">Dataset</font></h1>
+# 📚<font style="color:rgb(31, 35, 40);">Dataset</font>
 [**FortranEval**](https://github.com/zhu-zhu-ding/FortranCoder/tree/main/FortranEval)**:** **The first benchmark dataset to evaluate LLM's Fortran programming capabilities.**
 
 [**Evol-Code-Fortran**](https://github.com/zhu-zhu-ding/FortranCoder/blob/main/finetune/train_Evol_Code.json)**: Fortran instruction fine-tuning data generated using the Evol-Code method.**
 
-<h1 id="mNXHt">Fine-Tuning</h1>
+# Fine-Tuning
 <font style="color:rgb(31, 35, 40);">The script supports the training with </font>[DeepSpeed](https://github.com/microsoft/DeepSpeed)<font style="color:rgb(31, 35, 40);">. You need install required packages by:</font>
 
 ```bash
@@ -62,7 +62,7 @@ deepspeed --num_gpus 2 --master_port 6002 finetune/lora_deepseekcoder.py \
     --bf16 True
 ```
 
-<h1 id="o1znD">Inference</h1>
+# Inference
 The script is in the inference dir.
 
 ```bash
@@ -80,7 +80,7 @@ python inference.py \
 # --data_type fortran   #fortran or HumanEval
 ```
 
-<h2 id="quick-start">🚤<font style="color:rgb(31, 35, 40);">Quick Start</font></h2>
+## 🚤<font style="color:rgb(31, 35, 40);">Quick Start</font>
 ```bash
 from transformers import AutoTokenizer, AutoModelForCausalLM
 tokenizer = AutoTokenizer.from_pretrained(model_path, trust_remote_code=True)
