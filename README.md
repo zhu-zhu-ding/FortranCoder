@@ -5,7 +5,7 @@
 
 💫Important !!!!!
 
-🏅**<font style="color:rgb(31, 35, 40);">Fortrancoder-DS-6.7B</font>**<font style="color:rgb(31, 35, 40);"> outperforms </font>**<font style="color:rgb(31, 35, 40);">gpt-3.5-turbo-1106</font>**<font style="color:rgb(31, 35, 40);"> and </font>**<font style="color:rgb(31, 35, 40);">DeepSeek-Coder-6.7B-Instruct ( base model ) </font>**<font style="color:rgb(31, 35, 40);">on FortranEval!（32.5% vs [29.5% and 27.4%] on pass@1 and 80.8% vs [72.6% and 70.9%]）！</font>
+🏅 **<font style="color:rgb(31, 35, 40);">Fortrancoder-DS-6.7B</font>**<font style="color:rgb(31, 35, 40);"> outperforms </font>**<font style="color:rgb(31, 35, 40);">gpt-3.5-turbo-1106</font>**<font style="color:rgb(31, 35, 40);"> and </font>**<font style="color:rgb(31, 35, 40);">DeepSeek-Coder-6.7B-Instruct</font>**<font style="color:rgb(31, 35, 40);"> ( base model ) on FortranEval!（32.5% vs [29.5% and 27.4%] on pass@1 and 80.8% vs [72.6% and 70.9%]）！</font>
 
 ![](https://cdn.nlark.com/yuque/0/2024/png/38861830/1727250691535-0f8c97b0-4250-4b56-aea5-2b75fddf3952.png)
 
